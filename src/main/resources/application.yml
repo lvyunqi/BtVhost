@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+
+spring:
+  application:
+    # 应用名称
+    name: ChuqiCloudBtVhost
+
+  thymeleaf:
+    # 开启模板缓存（默认值： true ）
+    cache: false
+    # 检查模板是否存在，然后再呈现
+    check-template: true
+    # 检查模板位置是否正确（默认值 :true ）
+    check-template-location: true
+    #Content-Type 的值（默认值： text/html ）
+    servlet:
+      content-type: text/html
+    # 开启 MVC Thymeleaf 视图解析（默认值： true ）
+    enabled: true
+    # 模板编码
+    encoding: UTF-8
+    # 要运⽤于模板之上的模板模式。另⻅ StandardTemplate-ModeHandlers( 默认值： HTML5)
+    mode: HTML5
+    # 在构建 URL 时添加到视图名称前的前缀（默认值： classpath:/templates/ ）
+    prefix: file:public/templates/
+    # 在构建 URL 时添加到视图名称后的后缀（默认值： .html ）
+    suffix: .html
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver  # 数据库驱动
+    url: jdbc:mysql://localhost:3306/uking?serverTimezone=GMT%2B8  # 数据库连接地址
+    # 数据库用户名&密码:
+    username: Uking
+    password: UkingTest
+
+mybatis-plus:
+  global-config:
+    banner: false
