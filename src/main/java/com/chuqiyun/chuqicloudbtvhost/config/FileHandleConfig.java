@@ -5,6 +5,7 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,7 +16,7 @@ import java.util.Objects;
  * @date 2023/1/7
  */
 @Configuration
-public class FileHandleConfig extends WebMvcConfigurationSupport {
+public class FileHandleConfig implements WebMvcConfigurer {
     /**
      * 跨域
      **/
@@ -38,6 +39,6 @@ public class FileHandleConfig extends WebMvcConfigurationSupport {
         }
         String gitPath = Objects.requireNonNull(path).getParentFile().getParent() + File.separator + "public" + File.separator;
         registry.addResourceHandler("/**").addResourceLocations("file:" +gitPath + File.separator + "static" + File.separator);
-        super.addResourceHandlers(registry);
+        WebMvcConfigurer.super.addResourceHandlers(registry);
     }
 }
