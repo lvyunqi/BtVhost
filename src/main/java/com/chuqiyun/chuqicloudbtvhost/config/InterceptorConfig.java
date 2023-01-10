@@ -28,6 +28,11 @@ public class InterceptorConfig implements WebMvcConfigurer {
         loginRegistry.excludePathPatterns("/admin");
         loginRegistry.excludePathPatterns("/admin/**");
         // 排除资源请求
-        loginRegistry.excludePathPatterns("/static/**");
+        // 排除资源请求
+        loginRegistry.excludePathPatterns("/css/**");
+        loginRegistry.excludePathPatterns("/js/**");
+        loginRegistry.excludePathPatterns("/images/**");
+        loginRegistry.excludePathPatterns("/favicon.ico");
+        loginRegistry.excludePathPatterns("/fonts/**");
     }
 }
