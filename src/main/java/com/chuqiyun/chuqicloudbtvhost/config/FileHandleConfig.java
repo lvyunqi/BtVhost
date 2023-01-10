@@ -37,7 +37,8 @@ public class FileHandleConfig implements WebMvcConfigurer {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        String gitPath = Objects.requireNonNull(path).getParentFile().getParent() + File.separator + "public" + File.separator;
+        String rootPath = System.getProperty("user.dir");
+        String gitPath = rootPath + File.separator + "public" + File.separator;
         registry.addResourceHandler("/**").addResourceLocations("file:" +gitPath + File.separator + "static" + File.separator);
         WebMvcConfigurer.super.addResourceHandlers(registry);
     }
