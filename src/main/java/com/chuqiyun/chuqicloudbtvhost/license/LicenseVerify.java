@@ -53,7 +53,7 @@ public class LicenseVerify {
         try {
             LicenseContent licenseContent = licenseManager.verify();
 
-            logger.info(MessageFormat.format("证书校验通过，证书有效期：{0} - {1}",format.format(licenseContent.getNotBefore()),format.format(licenseContent.getNotAfter())));
+            logger.info(MessageFormat.format("接口校验通过，授权有效期：{0} - {1}",format.format(licenseContent.getNotBefore()),format.format(licenseContent.getNotAfter())));
             return true;
         }catch (Exception e){
             logger.error("证书校验失败！",e);
