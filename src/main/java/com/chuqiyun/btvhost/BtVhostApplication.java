@@ -1,5 +1,6 @@
 package com.chuqiyun.btvhost;
 
+import com.chuqiyun.btvhost.utils.EncryptUtil;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.SpringApplication;

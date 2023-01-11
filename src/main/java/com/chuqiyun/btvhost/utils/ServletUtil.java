@@ -6,6 +6,8 @@ import io.jsonwebtoken.Claims;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import static com.chuqiyun.btvhost.utils.RegexUtil.isPhone;
+
 
 /**
  * @author mryunqi
@@ -22,7 +24,11 @@ public class ServletUtil {
             return null;
         }
         User members = new User();
-        members.setId((Integer) jwt.get("UUID"));
+        if (isPhone((String) jwt.get("UUID"))){
+            members.setMobil((String) jwt.get("UUID"));
+        }else {
+            members.setEmail((String) jwt.get("UUID"));
+        }
         return members;
     }
 // 获取cookie中的属性值

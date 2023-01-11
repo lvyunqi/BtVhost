@@ -50,7 +50,7 @@ public class LicenseCheckInterceptor implements HandlerInterceptor {
                     User members = ServletUtil.getLoginMember(request);
                     if (null == members) {
                         //如果不是转发到/index上
-                        response.sendRedirect("/");
+                        response.sendRedirect("/admin/login");
                         return false;
                     }
 

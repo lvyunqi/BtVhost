@@ -1,5 +1,7 @@
 package com.chuqiyun.btvhost.config;
 
+import com.chuqiyun.btvhost.utils.EncryptUtil;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -28,7 +30,7 @@ public class FileHandleConfig implements WebMvcConfigurer {
     }
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    public void addResourceHandlers(@NotNull ResourceHandlerRegistry registry) {
         File path = null;
         try {
             path = new File(ResourceUtils.getURL("classpath:").getPath());

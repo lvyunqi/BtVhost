@@ -144,7 +144,7 @@ $('.signin-form').on('submit', function(event) {
         }, 1500);
       }else {
         $.notify({
-          message: '登录失败，错误原因：' + result.data,
+          message: '登录失败，错误原因：' + result.msg,
         },{
           type: 'danger',
           placement: {

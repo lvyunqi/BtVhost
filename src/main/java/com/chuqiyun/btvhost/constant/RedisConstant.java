@@ -30,17 +30,17 @@ public class RedisConstant {
     /**
      * redis-key-前缀-shiro:cache:
      */
-    public static final String PREFIX_SHIRO_CACHE = "vhostAdmin:cache:";
+    public static final String PREFIX_VHOST_CACHE = "vhostAdmin:cache:";
 
     /**
      * redis-key-前缀-shiro:access_token:
      */
-    public static final String PREFIX_SHIRO_ACCESS_TOKEN = "vhostAdmin:access_token:";
+    public static final String PREFIX_VHOST_ACCESS_TOKEN = "vhostAdmin:access_token:";
 
     /**
      * redis-key-前缀-shiro:refresh_token:
      */
-    public static final String PREFIX_SHIRO_REFRESH_TOKEN = "vhostAdmin:refresh_token:";
+    public static final String PREFIX_VHOST_REFRESH_TOKEN = "vhostAdmin:refresh_token:";
 
     /**
      * JWT-account:

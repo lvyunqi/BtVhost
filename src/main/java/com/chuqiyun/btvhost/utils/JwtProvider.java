@@ -27,11 +27,11 @@ public class JwtProvider {
      * @param userId 用户id
      */
     public static String createToken(Object userId) {
-        if (RedisUtil.exists(RedisConstant.PREFIX_SHIRO_CACHE + userId)) {
-            RedisUtil.delete(RedisConstant.PREFIX_SHIRO_CACHE + userId);
+        if (RedisUtil.exists(RedisConstant.PREFIX_VHOST_CACHE + userId)) {
+            RedisUtil.delete(RedisConstant.PREFIX_VHOST_CACHE + userId);
         }
         String currentTimeMillis = String.valueOf(System.currentTimeMillis());
-        RedisUtil.set(RedisConstant.PREFIX_SHIRO_REFRESH_TOKEN + userId, currentTimeMillis, expire);
+        RedisUtil.set(RedisConstant.PREFIX_VHOST_REFRESH_TOKEN + userId, currentTimeMillis, expire);
         return createToken(userId, "VhostWeb-Authorization");
     }
 
@@ -88,9 +88,9 @@ public class JwtProvider {
             log.info("[{}] UUID:{} 请求鉴权",clientId,userId);
             Date currentTimeMillis = claims.getIssuedAt();
             // 开始认证，要AccessToken认证通过，且Redis中存在RefreshToken，且两个Token时间戳一致
-            if (RedisUtil.exists(RedisConstant.PREFIX_SHIRO_REFRESH_TOKEN + userId)) {
+            if (RedisUtil.exists(RedisConstant.PREFIX_VHOST_REFRESH_TOKEN + userId)) {
                 // 获取RefreshToken的时间戳
-                Date currentTimeMillisRedis = new Date(Long.parseLong(Objects.requireNonNull(RedisUtil.get(RedisConstant.PREFIX_SHIRO_REFRESH_TOKEN + userId))));
+                Date currentTimeMillisRedis = new Date(Long.parseLong(Objects.requireNonNull(RedisUtil.get(RedisConstant.PREFIX_VHOST_REFRESH_TOKEN + userId))));
                 // 获取AccessToken时间戳，与RefreshToken的时间戳对比 1670407779316
                 if (currentTimeMillis.toString().equals(currentTimeMillisRedis.toString())) {
                     log.info("UUID:{},鉴权成功", userId);
