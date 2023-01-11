@@ -1,4 +1,7 @@
 var myChart = echarts.init(document.getElementById('main'));
+window.onresize=function (){
+    myChart.resize();
+}
 var geoCoordMapData = {
     '阿富汗': [67.709953, 33.93911],
     '安哥拉': [17.873887, -11.202692],
@@ -1097,7 +1100,7 @@ var option = {
         type: "map",
         map: 'world',
         zoom: 2, //当前视角的缩放比例
-        roam: false, //是否开启平游或缩放
+        roam: true, //是否开启平游或缩放
         aspectScale: 0.86,
         layoutCenter: ["50%", "50%"], //地图位置
         layoutSize: '100%',
