@@ -1,6 +1,18 @@
 server:
   port: 8080
 
+MySQL:
+  host: localhost
+  port: 3306
+  username: root
+  password: 123456
+  database: vhost
+
+RedisConfig:
+  host: 127.0.0.1
+  port: 6379
+  database: 1
+  password:
 
 spring:
   application:
@@ -27,13 +39,31 @@ spring:
     prefix: file:public/templates/
     # 在构建 URL 时添加到视图名称后的后缀（默认值： .html ）
     suffix: .html
+  redis:
+    host: ${RedisConfig.host}
+    port: ${RedisConfig.port}
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: 3000ms
+    timeout: 3000ms
+    database: ${RedisConfig.database}
+    password: ${RedisConfig.password}
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver  # 数据库驱动
-    url: jdbc:mysql://localhost:3306/uking?serverTimezone=GMT%2B8  # 数据库连接地址
-    # 数据库用户名&密码:
-    username: Uking
-    password: UkingTest
+    url: jdbc:mysql://${MySQL.host}:${MySQL.port}/${MySQL.database}?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT%2B8
+    username: ${MySQL.username}
+    password: ${MySQL.password}
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-timeout: 30000     # 等待连接池分配链接的最大时长（毫秒），超过这个时长还没有可用的连接则发生 SQLException，默认：30 秒
+      maximum-pool-size: 12         # 最大连接数
+      auto-commit: true             # 自动提交
+      idle-timeout: 600000          # 连接超时的最大时长（毫秒），超时则被释放（retired），默认：10 分钟
+      pool-name: "数据库连接池" # 连接池名称
+      max-lifetime: 1800000         # 连接的生命时长（毫秒），超时而且没被使用则被释放（retired），默认： 30 分钟
+      read-only: false # 从池获得的连接是否处于只读模式
 
 mybatis-plus:
   global-config:

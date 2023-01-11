@@ -60,7 +60,7 @@
       </div>
       <p class="text-center text-muted"><small>请使用您的账号登录系统</small></p>
 
-      <form action="#!" method="post" class="signin-form needs-validation" novalidate>
+      <form action="#" method="post" class="signin-form needs-validation" novalidate>
         <div class="mb-3">
           <label for="username">用户名</label>
           <input type="text" class="form-control" id="username" placeholder="请输入您的用户名" required>
@@ -79,7 +79,7 @@
         </div>
 
         <div class="mb-3 d-grid">
-          <button class="btn btn-primary" type="submit">立即登录</button>
+          <button id="login" class="btn btn-primary" type="submit">立即登录</button>
         </div>
       </form>
       <p class="text-center text-muted mt-3">Copyright © 2023 <a target="_blank" href="https://cloud.chuqis.com">初七云-虚拟主机自动化控制系统</a>. All right reserved</p>
@@ -110,68 +110,75 @@ $('.signin-form').on('submit', function(event) {
         $(this).addClass('was-validated');
         return false;
     }
-    
-    var $data  = $(this).serialize();
-    
-    $.post($(this).attr('action'), $data, function(res) {
-        //if (res.code) {
-        // 这里没有后端地址，就直接假设成功
-        if (true) {
-            $.notify({
-	            message: '登录成功，页面即将跳转~',
-	        },{
-	            type: 'success',
-	            placement: {
-	            	from: 'top',
-	            	align: 'right'
-	            },
-	            z_index: 10800,
-	            delay: 1500,
-                animate: {
-                    enter: 'animate__animated animate__fadeInUp',
-                    exit: 'animate__animated animate__fadeOutDown'
-                }
-	        });
-            setTimeout(function () {
-                location.href = 'index.html';
-            }, 1500);
-        } else {
-            $.notify({
-	            message: '登录失败，错误原因：' + res.msg,
-	        },{
-	            type: 'danger',
-	            placement: {
-	            	from: 'top',
-	            	align: 'right'
-	            },
-	            z_index: 10800,
-	            delay: 1500,
-                animate: {
-                    enter: 'animate__animated animate__shakeX',
-                    exit: 'animate__animated animate__fadeOutDown'
-                }
-	        });
-			$('#password').val('');
-            $("#captcha").click();
-        }
-    }).fail(function () {
+  const username = $('input[id="username"]').val();
+  const password = $('input[id="password"]').val();
+  const rememberme = $('input[id="rememberme"]').val();
+  $.ajax({
+    type : "POST",
+    url: "/admin/loginDo",
+    data: JSON.stringify({
+      username : username,
+      password : password,
+      rememberme : rememberme
+    }),
+    contentType : "application/json",
+    success : function(result) {
+      if (result.code == 20000) {
         $.notify({
-	        message: '服务器错误',
-	    },{
-	        type: 'danger',
-	        placement: {
-	        	from: 'top',
-	        	align: 'right'
-	        },
-	        z_index: 10800,
-	        delay: 1500,
-            animate: {
-                enter: 'animate__animated animate__shakeX',
-                exit: 'animate__animated animate__fadeOutDown'
-            }
-	    });
+          message: '登录成功，页面即将跳转~',
+        }, {
+          type: 'success',
+          placement: {
+            from: 'top',
+            align: 'right'
+          },
+          z_index: 10800,
+          delay: 1500,
+          animate: {
+            enter: 'animate__animated animate__fadeInUp',
+            exit: 'animate__animated animate__fadeOutDown'
+          }
+        });
+        setTimeout(function () {
+          location.href = '/admin';
+        }, 1500);
+      }else {
+        $.notify({
+          message: '登录失败，错误原因：' + result.msg,
+        },{
+          type: 'danger',
+          placement: {
+            from: 'top',
+            align: 'right'
+          },
+          z_index: 10800,
+          delay: 1500,
+          animate: {
+            enter: 'animate__animated animate__shakeX',
+            exit: 'animate__animated animate__fadeOutDown'
+          }
+        });
+        $('#password').val('');
+        $("#captcha").click();
+      }
+    }
+  }).fail(function () {
+    $.notify({
+      message: '服务器错误',
+    },{
+      type: 'danger',
+      placement: {
+        from: 'top',
+        align: 'right'
+      },
+      z_index: 10800,
+      delay: 1500,
+      animate: {
+        enter: 'animate__animated animate__shakeX',
+        exit: 'animate__animated animate__fadeOutDown'
+      }
     });
-
+  });
     return false;
 });
 </script>

@@ -1,0 +1,16 @@
+server:
+  port: 8080
+# mysql
+MySQL:
+  host: 111.172.243.59 # 连接地址
+  port: 3306 # 端口
+  username: chuqivhost # 用户名
+  password: vhost # 密码
+  database: chuqivhost # 表名
+
+#Redis
+RedisConfig:
+  host: 127.0.0.1
+  port: 6379
+  database: 1 # 选择第几个库
+  password:
