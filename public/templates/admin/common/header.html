@@ -10,20 +10,26 @@
       
           <!-- logo -->
           <div id="logo" class="sidebar-header">
-            <a href="admin"><img src="images/logo.png" title="logo" alt="logo" /></a>
+            <a href="admin"><img src="/images/Logo.png" width="180px" title="logo" alt="logo" /></a>
           </div>
-          <div class="lyear-layout-sidebar-info lyear-scroll">
+          <div class="shadow-lg lyear-layout-sidebar-info lyear-scroll">
     
             <nav class="sidebar-main">
     
               <ul class="nav-drawer">
-                <li class="nav-item" th:classappend="${page == 'adminHome'}?'active'"> 
-                  <a href="admin">
+                <li class="nav-item" th:classappend="${page == 'adminHome'}?'active open'"> 
+                  <a href="/admin">
                     <i class="mdi mdi-card-text"></i>
                     <span>数据报表</span>
                   </a>
                 </li>
-                <li class="nav-item nav-item-has-subnav" th:classappend="${page == 'server'}?'active'"> 
+                  <li class="nav-item" th:classappend="${page == 'ip'}?'active open'">
+                      <a href="/admin/ip">
+                          <i class="mdi mdi-ip-network"></i>
+                          <span>IP管理</span>
+                      </a>
+                  </li>
+                <li class="nav-item nav-item-has-subnav" th:classappend="${page == 'region'}?'active open'"> 
                     <a href="javascript:void(0)">
                         <i class="mdi mdi-server"></i>
                         <span>区域节点</span>
@@ -33,7 +39,8 @@
                         <li class="" th:classappend="${page_tab == 'node'}?'active'"> <a href="/admin/node">服务器管理</a> </li>
                     </ul>
                 </li>
-                <li class="nav-item nav-item-has-subnav" th:classappend="${page == 'vhost'}?'active'">
+
+                <li class="nav-item nav-item-has-subnav" th:classappend="${page == 'vhost'}?'active open'">
                   <a href="javascript:void(0)">
                     <i class="mdi mdi-adjust"></i>
                     <span>业务管理</span>
@@ -106,7 +113,6 @@
                 <span class="lyear-toggler-bar"></span>
                 <span class="lyear-toggler-bar"></span>
               </div>
-              <span class="navbar-page-title" th:text="${title}"></span>
             </div>
     
             <ul class="navbar-right d-flex align-items-center">
@@ -299,7 +305,7 @@
               <!--个人头像内容-->
               <li class="dropdown">
                 <a href="javascript:void(0)" data-bs-toggle="dropdown" class="dropdown-toggle">
-                  <img class="avatar-md rounded-circle" src="https://q1.qlogo.cn/g?b=qq&nk=434658198&s=100" alt="管理员" />
+                  <img class="avatar-md rounded-circle" src="/images/admin/admin.png" alt="管理员" />
                   <span class="text-yellow" style="margin-left: 10px;">管理员</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">

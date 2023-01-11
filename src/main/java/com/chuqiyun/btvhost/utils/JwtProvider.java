@@ -19,20 +19,20 @@ import java.util.Objects;
 @Slf4j
 @Component
 public class JwtProvider {
-    private static final int expire = 1800;
+    //private static final int expire = 1800;
 
     /**
      * 生成token
      *
      * @param userId 用户id
      */
-    public static String createToken(Object userId) {
+    public static String createToken(Object userId, int expire) {
         if (RedisUtil.exists(RedisConstant.PREFIX_VHOST_CACHE + userId)) {
             RedisUtil.delete(RedisConstant.PREFIX_VHOST_CACHE + userId);
         }
         String currentTimeMillis = String.valueOf(System.currentTimeMillis());
         RedisUtil.set(RedisConstant.PREFIX_VHOST_REFRESH_TOKEN + userId, currentTimeMillis, expire);
-        return createToken(userId, "VhostWeb-Authorization");
+        return createToken(userId, "VhostWeb-Authorization", expire);
     }
 
     /**
@@ -41,9 +41,9 @@ public class JwtProvider {
      * @param userId   用户id
      * @param clientId 用于区别客户端，如移动端，网页端，此处可根据业务自定义
      */
-    public static String createToken(Object userId, String clientId) {
+    public static String createToken(Object userId, String clientId, int expire) {
         //@Value("${jwt.expire}")
-        Date validity = new Date((new Date()).getTime() + expire * 1000);
+        Date validity = new Date((new Date()).getTime() + expire * 1000L);
         return Jwts.builder()
                 // 代表这个JWT的主体，即它的所有人
                 .setSubject(String.valueOf(userId))

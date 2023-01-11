@@ -37,7 +37,7 @@ public class testDemo {
     @GetMapping("/getjwt")
     public ResponseResult<String> getJwt(HttpServletResponse response){
         int uuid = 1001;
-        String jwt = createToken(uuid);
+        String jwt = createToken(uuid,1800);
         Cookie cookie = new Cookie("token", jwt);
         cookie.setMaxAge(1800);
         cookie.setPath("/");

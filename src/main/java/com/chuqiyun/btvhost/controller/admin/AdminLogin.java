@@ -72,9 +72,15 @@ public class AdminLogin {
         if (!user.getPassword().equals(EncryptUtil.md5(data.getString("password")))){
             return ResponseResult.fail("账号或密码不正确!");
         }
-        String jwt = createToken(data.getString("username"));
+        int expire = 0;
+        if (data.getInteger("rememberme") == 0){
+            expire = 1800;
+        }else {
+            expire = 432000;
+        }
+        String jwt = createToken(data.getString("username"),expire);
         Cookie cookie = new Cookie("token", jwt);
-        cookie.setMaxAge(1800);
+        cookie.setMaxAge(expire);
         response.addCookie(cookie);
         return ResponseResult.ok();
     }
