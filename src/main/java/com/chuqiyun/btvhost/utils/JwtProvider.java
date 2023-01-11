@@ -19,20 +19,20 @@ import java.util.Objects;
 @Slf4j
 @Component
 public class JwtProvider {
-    private final int expire = 1800;
+    private static final int expire = 1800;
 
     /**
      * 生成token
      *
      * @param userId 用户id
      */
-    public String createToken(Object userId) {
+    public static String createToken(Object userId) {
         if (RedisUtil.exists(RedisConstant.PREFIX_SHIRO_CACHE + userId)) {
             RedisUtil.delete(RedisConstant.PREFIX_SHIRO_CACHE + userId);
         }
         String currentTimeMillis = String.valueOf(System.currentTimeMillis());
         RedisUtil.set(RedisConstant.PREFIX_SHIRO_REFRESH_TOKEN + userId, currentTimeMillis, expire);
-        return createToken(userId, "UkingWeb-Authorization");
+        return createToken(userId, "VhostWeb-Authorization");
     }
 
     /**
@@ -41,14 +41,14 @@ public class JwtProvider {
      * @param userId   用户id
      * @param clientId 用于区别客户端，如移动端，网页端，此处可根据业务自定义
      */
-    public String createToken(Object userId, String clientId) {
+    public static String createToken(Object userId, String clientId) {
         //@Value("${jwt.expire}")
         Date validity = new Date((new Date()).getTime() + expire * 1000);
         return Jwts.builder()
                 // 代表这个JWT的主体，即它的所有人
                 .setSubject(String.valueOf(userId))
                 // 代表这个JWT的签发主体
-                .setIssuer("Uking Master Control System")
+                .setIssuer("Vhost Master Control System")
                 // 是一个时间戳，代表这个JWT的签发时间；
                 .setIssuedAt(new Date())
                 // 代表这个JWT的接收对象
@@ -56,8 +56,8 @@ public class JwtProvider {
                 // 放入用户id
                 .claim("UUID", userId)
                 // 自定义信息
-                .claim("Auth", "User")
-                .signWith(SignatureAlgorithm.HS512, this.getSecretKey())
+                .claim("Auth", "Admin")
+                .signWith(SignatureAlgorithm.HS512, getSecretKey())
                 .setExpiration(validity)
                 .compact();
     }
@@ -65,9 +65,9 @@ public class JwtProvider {
     /**
      * 校验token
      */
-    public boolean validateToken(String authToken) {
+    public static boolean validateToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(this.getSecretKey()).parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(getSecretKey()).parseClaimsJws(authToken);
             return true;
         } catch (Exception e) {
             log.error("无效的token：" + authToken);
@@ -78,9 +78,9 @@ public class JwtProvider {
     /**
      * 解码token
      */
-    public Claims decodeToken(String token) {
+    public static Claims decodeToken(String token) {
         if (validateToken(token)) {
-            Claims claims = Jwts.parser().setSigningKey(this.getSecretKey()).parseClaimsJws(token).getBody();
+            Claims claims = Jwts.parser().setSigningKey(getSecretKey()).parseClaimsJws(token).getBody();
             // 客户端id
             String clientId = claims.getAudience();
             // 用户id
@@ -104,7 +104,7 @@ public class JwtProvider {
         return null;
     }
 
-    private String getSecretKey() {
+    private static String getSecretKey() {
         //@Value("${jwt.secret}")
         String secret = "UkingMryunqi434253";
         return Base64.getEncoder().encodeToString(secret.getBytes(StandardCharsets.UTF_8));

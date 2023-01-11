@@ -2,24 +2,53 @@ package com.chuqiyun.btvhost.controller;
 
 import com.chuqiyun.authorization.entity.LicenseCheckModel;
 import com.chuqiyun.btvhost.BtVhostApplication;
+import com.chuqiyun.btvhost.annotation.AdminLoginCheck;
 import com.chuqiyun.btvhost.license.LicenseVerify;
 import com.chuqiyun.btvhost.model.AbstractServerInfos;
 import com.chuqiyun.btvhost.model.LinuxServerInfos;
 import com.chuqiyun.btvhost.model.WindowsServerInfos;
+import com.chuqiyun.btvhost.utils.ResponseResult;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
+
+import static com.chuqiyun.btvhost.utils.EncryptUtil.md5;
+import static com.chuqiyun.btvhost.utils.EncryptUtil.md5Code;
+import static com.chuqiyun.btvhost.utils.JwtProvider.createToken;
+import javax.servlet.http.Cookie;
 
 /**
  * @author mryunqi
  * @date 2023/1/9
  */
 @RestController
+@ResponseBody
 public class testDemo {
     @GetMapping("/restart")
     public void restart() {
         BtVhostApplication.restart();
+    }
+
+    @GetMapping("/getjwt")
+    public ResponseResult<String> getJwt(HttpServletResponse response){
+        int uuid = 1001;
+        String jwt = createToken(uuid);
+        Cookie cookie = new Cookie("token", jwt);
+        cookie.setMaxAge(1800);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        return ResponseResult.ok(jwt);
+    }
+
+    @AdminLoginCheck
+    @GetMapping("/jwttest")
+    public ResponseResult<String> jwtTest(){
+        return ResponseResult.ok();
     }
 
 
