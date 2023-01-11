@@ -112,7 +112,12 @@ $('.signin-form').on('submit', function(event) {
     }
   const username = $('input[id="username"]').val();
   const password = $('input[id="password"]').val();
-  const rememberme = $('input[id="rememberme"]').val();
+  var rememberme = "";
+  if($('input[id="rememberme"]').prop("checked")){
+    rememberme=1;
+  }else {
+    rememberme=0;
+  }
   $.ajax({
     type : "POST",
     url: "/admin/loginDo",
