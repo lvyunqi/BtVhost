@@ -2,6 +2,7 @@ package com.chuqiyun.btvhost.interceptor;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.chuqiyun.btvhost.annotation.AdminLoginCheck;
+import com.chuqiyun.btvhost.annotation.ApiCheck;
 import com.chuqiyun.btvhost.entity.User;
 import com.chuqiyun.btvhost.license.LicenseVerify;
 import com.chuqiyun.btvhost.utils.RedisUtil;
@@ -59,12 +60,26 @@ public class LicenseCheckInterceptor implements HandlerInterceptor {
             }
             return true;
         }else{
-            response.setContentType("application/json;charset=utf-8");
-            JSONObject obj = new JSONObject();
-            obj.put("code", 20401);
-            obj.put("msg", "系统未授权");
-            response.getWriter().print(obj);
-            response.getWriter().flush();
+            if (haveAnnotation){
+                // 强转
+                HandlerMethod handlerMethod = (HandlerMethod) handler;
+                // 获取方法
+                Method method = handlerMethod.getMethod();
+                if (!method.isAnnotationPresent(ApiCheck.class)) {
+                    response.sendRedirect("/authError");
+                    return false;
+                }
+                ApiCheck apiCheck = method.getAnnotation(ApiCheck.class);
+                //如果存在该注解
+                if (null != apiCheck) {
+                    response.setContentType("application/json;charset=utf-8");
+                    JSONObject obj = new JSONObject();
+                    obj.put("code", 20401);
+                    obj.put("msg", "系统未授权");
+                    response.getWriter().print(obj);
+                    response.getWriter().flush();
+                }
+            }
             return false;
         }
     }

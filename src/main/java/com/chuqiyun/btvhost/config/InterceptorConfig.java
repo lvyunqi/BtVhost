@@ -23,6 +23,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
         loginRegistry.addPathPatterns("/**");
         // 排除路径
         loginRegistry.excludePathPatterns("/getServerInfos");
+        loginRegistry.excludePathPatterns("/authError");
         // 排除资源请求
         // 排除资源请求
         loginRegistry.excludePathPatterns("/css/**");
