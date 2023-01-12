@@ -9,6 +9,9 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import static com.chuqiyun.btvhost.utils.RedisUtil.isRedisConnected;
+
+
 /**
  * @author mryunqi
  * @date 2023/1/9

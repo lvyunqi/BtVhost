@@ -3,6 +3,7 @@ package com.chuqiyun.btvhost.controller;
 import com.chuqiyun.authorization.entity.LicenseCheckModel;
 import com.chuqiyun.btvhost.BtVhostApplication;
 import com.chuqiyun.btvhost.annotation.AdminLoginCheck;
+import com.chuqiyun.btvhost.annotation.SysLog;
 import com.chuqiyun.btvhost.license.LicenseVerify;
 import com.chuqiyun.btvhost.model.AbstractServerInfos;
 import com.chuqiyun.btvhost.model.LinuxServerInfos;
@@ -10,10 +11,7 @@ import com.chuqiyun.btvhost.model.WindowsServerInfos;
 import com.chuqiyun.btvhost.utils.ResponseResult;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,6 +27,12 @@ import javax.servlet.http.Cookie;
 @RestController
 @ResponseBody
 public class testDemo {
+
+    @RequestMapping("test1")
+    @SysLog(operMoudle = "测试接口",operMethod="test", operDes = "测试")
+    public ResponseResult<String> test1(){
+        return ResponseResult.ok();
+    }
     @GetMapping("/restart")
     public void restart() {
         BtVhostApplication.restart();

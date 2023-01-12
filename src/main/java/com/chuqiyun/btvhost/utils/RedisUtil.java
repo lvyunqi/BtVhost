@@ -172,4 +172,12 @@ public class RedisUtil {
             }
         }
     }
+
+    public static boolean isRedisConnected() {
+        try {
+            return Boolean.TRUE.equals(redisTemplate.execute((RedisCallback<Boolean>) connection -> "PONG".equals(connection.ping())));
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

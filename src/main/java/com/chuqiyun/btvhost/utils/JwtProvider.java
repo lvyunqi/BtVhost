@@ -12,6 +12,8 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.Objects;
 
+import static com.chuqiyun.btvhost.utils.RedisUtil.isRedisConnected;
+
 /**
  * @author mryunqi
  * @date 2023/1/10
@@ -27,11 +29,15 @@ public class JwtProvider {
      * @param userId 用户id
      */
     public static String createToken(Object userId, int expire) {
-        if (RedisUtil.exists(RedisConstant.PREFIX_VHOST_CACHE + userId)) {
-            RedisUtil.delete(RedisConstant.PREFIX_VHOST_CACHE + userId);
+        if (isRedisConnected()){
+            if (RedisUtil.exists(RedisConstant.PREFIX_VHOST_CACHE + userId)) {
+                RedisUtil.delete(RedisConstant.PREFIX_VHOST_CACHE + userId);
+            }
+            String currentTimeMillis = String.valueOf(System.currentTimeMillis());
+            RedisUtil.set(RedisConstant.PREFIX_VHOST_REFRESH_TOKEN + userId, currentTimeMillis, expire);
+        }else {
+            log.warn("您未配置Redis或当前Redis不在状态，请及时检查修复，以免造成严重安全隐患！");
         }
-        String currentTimeMillis = String.valueOf(System.currentTimeMillis());
-        RedisUtil.set(RedisConstant.PREFIX_VHOST_REFRESH_TOKEN + userId, currentTimeMillis, expire);
         return createToken(userId, "VhostWeb-Authorization", expire);
     }
 
@@ -87,6 +93,11 @@ public class JwtProvider {
             Object userId = claims.get("UUID");
             log.info("[{}] UUID:{} 请求鉴权",clientId,userId);
             Date currentTimeMillis = claims.getIssuedAt();
+            if (!isRedisConnected()){
+                log.info("UUID:{},鉴权成功", userId);
+                log.warn("您未配置Redis或当前Redis不在状态，请及时检查修复，以免造成严重安全隐患！");
+                return claims;
+            }
             // 开始认证，要AccessToken认证通过，且Redis中存在RefreshToken，且两个Token时间戳一致
             if (RedisUtil.exists(RedisConstant.PREFIX_VHOST_REFRESH_TOKEN + userId)) {
                 // 获取RefreshToken的时间戳
