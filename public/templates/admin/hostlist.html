@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="keywords" content="初七云,云虚拟主机管理系统">
+    <meta name="description" content="云虚拟主机管理系统">
+    <title>控制中心 - 云虚拟主机管理系统</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="stylesheet" type="text/css" href="/js/bootstrap-table/bootstrap-table.css">
+    <link rel="stylesheet" type="text/css" href="/css/materialdesignicons.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap4/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.min.css">
+</head>
+
+<body>
+
+<!--页面loading-->
+<div id="lyear-preloader" class="loading">
+    <div class="ctn-preloader">
+        <div class="round_spinner">
+            <div class="spinner"></div>
+            <img src="/images/loading-logo.png" alt="">
+        </div>
+    </div>
+</div>
+<!--页面loading end-->
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <div id="header" th:include="admin/common/header :: common_header(${title},${page},${page_tab})"></div>
+        <main class="lyear-layout-content">
+
+            <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-lg-12">
+                <div class="card">
+                    <header class="card-header"><div class="card-title">主机列表</div></header>
+                    <div class="card-body">
+
+                        <div class="callout callout-info">
+                            <p class="small">
+                                <strong>操作图标详解</strong><br/>
+                                <a href="#!" class="btn btn-xs btn-default" title="编辑" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>：编辑纪录
+                                <a href="#!" class="btn btn-xs btn-default" title="删除" data-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>：删除主机<br/>
+                                <a href="#!" class="btn btn-xs btn-default" title="登陆控制面板" data-toggle="tooltip"><i class="mdi mdi-security-network"></i></a>：登陆控制面板
+                            </p></div>
+                        <div id="" class="toolbar-btn-action">
+                            <button id="btn_add" type="button" class="btn btn-primary m-r-5 js-create-tab" aria-hidden="true" data-title="添加主机" data-url="add.php?gn=zj">
+                                <span class="mdi mdi-plus"></span>新增主机
+                            </button>
+                            <button id="btn_delete" type="button" class="btn btn-danger" onclick="xzdelbt()">
+                                <span class="mdi mdi-window-close" aria-hidden="true"></span>删除选中
+                            </button>
+                        </div>
+                        <table id="tb_departments"></table>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/popper.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap4/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="/js/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+<script type="text/javascript" src="/js/jquery-confirm/jquery-confirm.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap-table/bootstrap-table.js"></script>
+<script type="text/javascript" src="/js/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+<script type="text/javascript" src="/js/lyear-loading.js"></script>
+<script type="text/javascript" src="/js/bootstrap-notify.min.js"></script>
+<script type="text/javascript" src="/js/fn-hs.js"></script>
+<script type="text/javascript">
+        function hqxzh() {		//获取选中行
+            var selRows = $("#tb_departments").bootstrapTable("getSelections");
+            if(selRows.length == 0){
+                return 'NOT_NONE';
+            }
+
+            var arr = new Array();
+            $.each(selRows,function(i) {
+                arr.push(this.id);
+            });
+            return arr;
+        }
+
+        function xzdelbt() {
+            if(!confirm('删除后不可恢复\n是否确认删除这些主机？\n如果这些主机所属宝塔无法正常访问将会删除失败！\n如果需要删除宝塔下的所有主机请前去宝塔列表删除宝塔即可！')){return;}
+            msloading('正在删除中，请稍后...')  // 加载显示
+            var arr=hqxzh();
+            if(arr=='NOT_NONE'){msalert(3,'请至少选择一行',3000);msloadingde();return;}
+            let data = {};
+            data["gn"]="zjscxz";
+            data["idsz"]=arr;
+            $.post('./ajax.php', data, function (date) {
+                var jsoe= JSON.parse(date);
+                var qk= jsoe.codr;
+                var qke= jsoe.code;
+
+                if(qk=='0'){
+                    msloadingde();
+                    msalert(1,'删除成功'+qke+'句',5000);
+                    $("#tb_departments").bootstrapTable('refreshOptions',{pageNumber:1});		//刷新表格
+                }else{
+                    msloadingde();
+                    msalert(1,'删除成功'+qke+'句',5000);
+                    msalert(4,'删除失败'+qk+'句',5000);
+                    $("#tb_departments").bootstrapTable('refreshOptions',{pageNumber:1});		//刷新表格
+                }
+            })
+        }
+
+        function bj_bc() {
+            var user=zjuser.value;
+            var pass=zjpass.value;
+            var sqlusere=sqluser.value;
+            var sqlpasse=sqlpass.value;
+            var datare=datar.value;
+            var id=idr.value;
+            var urlz=urlbd.value;
+            var webkjr=webkjt.value;
+            var sqlkjr=sqlkjt.value;
+            var lldr=llmax.value;
+            var kg=zjkg.checked;
+            if(user=="" || pass=="" || sqluser=="" || sqlpass=="" || datar==""){
+                msalert(3,'表单不能为空！',3000,'#tanchuang');
+            }else{
+                msloading('正在修改中...');
+                let data = {};
+                data["gn"]="zjxgjl";
+                data["id"]=id;
+                data["user"]=user;
+                data["pass"]=pass;
+                data["sqluser"]=sqlusere;
+                data["sqlpass"]=sqlpasse;
+                data["datar"]=datare;
+                data["ymbds"]=urlz;
+                data["webkj"]=webkjr;
+                data["sqlkj"]=sqlkjr;
+                data["llmax"]=lldr;
+                data["kg"]=kg;
+                $.post('./ajax.php', data, function (date) {
+                    var jsoe= JSON.parse(date);
+                    var qk= jsoe.code
+
+                    if(qk=='修改成功'){
+                        $("#tb_departments").bootstrapTable('refreshOptions',{pageNumber:1});		//刷新表格
+                        $('#tanchuang').modal('hide');		//关闭弹窗
+                        msalert(1,'修改成功！',3000);
+                        msloadingde();		//关闭加载条
+                    }else{
+                        msalert(4,qk,3000,'#tanchuang');
+                        msloadingde();		//关闭加载条
+
+                    }
+                })
+            }}
+
+        $('#tb_departments').bootstrapTable({
+            classes: 'table table-bordered table-hover table-striped',
+            url: '/admin',
+            method: 'post',
+            contentType : "application/x-www-form-urlencoded",  //请求格式
+            dataType : 'json',        // 因为本示例中是跨域的调用,所以涉及到ajax都采用jsonp,
+            uniqueId: 'id',
+            idField: 'id',             // 每行的唯一标识字段
+            toolbar: '#toolbar',       // 工具按钮容器
+            //clickToSelect: true,     // 是否启用点击选中行
+            showColumns: true,         // 是否显示所有的列
+            showRefresh: true,         // 是否显示刷新按钮
+            showToggle: true,        // 是否显示详细视图和列表视图的切换按钮(clickToSelect同时设置为true时点击会报错)
+            pagination: true,                    // 是否显示分页
+            sortOrder: "desc",                    // 排序方式
+            sortName: "id",                     //默认排序字段
+            queryParams: function(params) {
+                var temp = {
+                    gn: 'listzj',         // 请求功能
+                    limit: params.limit,         // 每页数据量
+                    offset: params.offset,       // sql语句起始索引
+                    page: (params.offset / params.limit) + 1,
+                    sort: params.sort,           // 排序的列名
+                    sortOrder: params.order      // 排序方式'asc' 'desc'
+                };
+                return temp;
+            },                                   // 传递参数
+            sidePagination: "server",            // 分页方式：client客户端分页，server服务端分页
+            pageNumber: 1,                       // 初始化加载第一页，默认第一页
+            pageSize: 10,                        // 每页的记录行数
+            pageList: [10, 25, 50, 100],         // 可供选择的每页的行数
+            //search: true,                      // 是否显示表格搜索，此搜索是客户端搜索
+
+            showExport: true,        // 是否显示导出按钮, 导出功能需要导出插件支持(tableexport.min.js)
+            exportDataType: "basic", // 导出数据类型, 'basic':当前页, 'all':所有数据, 'selected':选中的数据
+
+            columns: [{
+                field: 'example',
+                checkbox: true    // 是否显示复选框
+            }, {
+                field: 'id',
+                title: 'ID',
+                sortable: true    // 是否排序
+            }, {
+                field: 'ssbt',
+                title: '所属宝塔',
+                sortable: true    // 是否排序
+            }, {
+                field: 'hxc',
+                title: '产品类型',
+                sortable: true,    // 是否排序
+                formatter:function(value){
+                    if(value=='1'){
+                        var cplx='CDN';
+                    }else{
+                        var cplx='主机';
+                    }
+                    return cplx;
+                }
+            }, {
+                field: 'sqldz',
+                title: '网站名'
+            }, {
+                field: 'userpass',
+                title: '账号/密码',
+                formatter:function(value,row){
+                    return row.user+'<br/>'+row.pass;
+                }
+            }, {
+                field: 'sqluserpass',
+                title: 'SQL账号/密码',
+                formatter:function(value,row){
+                    return row.sqluser+'<br/>'+row.sqlpass;
+                }
+            }, {
+                field: 'webkj',
+                title: '网页空间',
+                formatter:function(value,row){
+                    fanhuiqk='';
+                    if(row.hxc=='2'){
+                        var jsoe= JSON.parse(row.hxa);
+                        var dq=Number(jsoe.dq).toFixed(2);      //当前用量四舍五入保留两位小数
+                        if(dq>Number(jsoe.max)){
+                            var textcolor='text-danger';
+                            fanhuiqk+='<span class="badge badge-danger"><b>网页超出</b></span><div class="w-100" style="height:1px;"></div>';
+                        }else{
+                            var textcolor='text-success';
+                        }
+                        return '<span class="'+textcolor+'">'+dq+'/'+jsoe.max+'MB'+'</span>';
+                    }else{
+                        return '<span class="text-info">CDN产品</span>';
+                    }
+                }
+            }, {
+                field: 'sqlkj',
+                title: '数据库空间',
+                formatter:function(value,row){
+                    if(row.hxc=='2'){
+                        var jsoe= JSON.parse(row.hxb);
+                        var dq=Number(jsoe.dq).toFixed(2);      //当前用量四舍五入保留两位小数
+                        if(dq>Number(jsoe.max)){
+                            var textcolor='text-danger';
+                            fanhuiqk+='<span class="badge badge-danger"><b>数据库超出</b></span><div class="w-100" style="height:1px;"></div>';
+                        }else{
+                            var textcolor='text-success';
+                        }
+                        return '<span class="'+textcolor+'">'+dq+'/'+jsoe.max+'MB'+'</span>';;
+                    }else{
+                        return '<span class="text-info">CDN产品</span>';
+                    }
+                }
+            }, {
+                field: 'lls',
+                title: '已使用/总流量',
+                formatter:function(value,row){
+                    var jsoe= JSON.parse(row.llmax);
+                    var wdq=Number(jsoe.dq);      //当前用量
+                    var rdq=wdq / (1024*1024*1024);     //单位转换：B转GB
+                    var dq=rdq.toFixed(2);       //四舍五入保留两位小数
+                    if(dq>Number(jsoe.max)){
+                        var textcolor='text-danger';
+                        fanhuiqk+='<span class="badge badge-danger"><b>流量超出</b></span><div class="w-100" style="height:1px;"></div>';
+                    }else{
+                        var textcolor='text-success';
+                    }
+                    return '<span class="'+textcolor+'">'+dq+'/'+jsoe.max+'G'+'</span>';;
+                }
+            }, {
+                field: 'data',
+                title: '创建时间'
+            }, {
+                field: 'datae',
+                title: '到期时间',
+                formatter:function(value,row){
+                    var date=row.data;
+                    var dqdate=row.datae;
+                    if(dqdate!='0000-00-00'){
+
+                        var customTimesr = dqdate.replace("-", "/");
+                        var customTimed = new Date(Date.parse(customTimesr));
+                        var currentTime = new Date();
+
+                        if(currentTime>customTimed){
+                            textcolor='text-danger';
+                            fanhuiqk+='<span class="badge badge-danger"><b>主机到期</b></span><div class="w-100" style="height:1px;"></div>';
+                        }else{
+                            textcolor='text-success';
+                        }
+                    }else{
+                        textcolor='text-success';
+                    }
+                    return '<span class="'+textcolor+'">'+row.datae+'</span>';
+                }
+            }, {
+                field: 'qk',
+                title: '状态',
+                formatter:function(value,row){
+                    if(value=='false'){
+                        fanhuiqk+='<span class="badge badge-danger"><b>被关闭</b></span>';
+                    }
+
+                    if(fanhuiqk==''){
+                        var sc='<span class="badge badge-success"><b>正常</b></span>';
+                    }else{
+                        var sc=fanhuiqk;
+                    }
+                    fanhuiqk='';
+                    return sc;
+                }
+
+            }, {
+                field: 'operate',
+                title: '主机操作',
+                formatter: btnGroup,  // 自定义方法
+                events: {
+                    'click .edit-btn': function (event, value, row, index) {
+                        editUser(row);
+                    },
+                    'click .del-btn': function (event, value, row, index) {
+                        delUser(row);
+                    },
+                    'click .login-kzmb': function (event, value, row, index) {
+                        msloading('正在登陆中...');  // 加载显示
+                        let data = {};
+                        data["username"]=row.user;
+                        data["password"]=row.pass;
+                        //alert(codeq);
+                        $.post('../user/idcdl.php?gn=logine', data, function (date) {
+
+                            msalert(1,'登陆成功！页面即将自动跳转~',2000);
+                            window.location.href="../user/";
+                            msloadingde();  // 隐藏
+                        })
+                    }
+                }
+            }],
+            onLoadSuccess: function(data){
+                $("[data-toggle='tooltip']").tooltip();
+            }
+        });
+
+        // 操作按钮
+        function btnGroup ()
+        {
+            let html =
+                '<a href="#!" class="btn btn-xs btn-default edit-btn" title="编辑" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>' +
+                '<a href="#!" class="btn btn-xs btn-default login-kzmb" title="登陆控制面板" data-toggle="tooltip"><i class="mdi mdi-security-network"></i></a>' +
+                '<a href="#!" class="btn btn-xs btn-default del-btn" title="删除" data-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>';
+            return html;
+        }
+
+        // 操作方法 - 编辑
+        function editUser(row)
+        {
+
+            document.getElementById("zjuser").value = row.user;
+            document.getElementById("zjpass").value = row.pass;
+            document.getElementById("sqluser").value = row.sqluser;
+            document.getElementById("sqlpass").value = row.sqlpass;
+            document.getElementById("webkjt").value = JSON.parse(row.hxa).max;
+            document.getElementById("sqlkjt").value = JSON.parse(row.hxb).max;
+            document.getElementById("llmax").value = JSON.parse(row.llmax).max;
+            if(row.ymbds=='0' || row.ymbds==''){ var urlbde='无限制'; }else{ var urlbde=row.ymbds; }
+            document.getElementById("urlbd").value = urlbde;
+            document.getElementById("datar").value = row.datae;
+            document.getElementById("idr").value = row.id;
+            if(row.qk!='true'){
+                document.getElementById("zjkg").checked = "";
+            }else{
+                document.getElementById("zjkg").checked = "true";
+            }
+            if(row.hxc=='1'){
+                document.getElementById("irth").style.display="none";
+                document.getElementById("urlbd").value="1";
+                document.getElementById("urlbd").readOnly="true";
+            }else{
+                document.getElementById("urlbd").readOnly="";
+                document.getElementById("irth").style.display="block";
+            }
+
+            $('#tanchuang').modal();		//弹出弹窗
+        }
+        // 操作方法 - 删除
+        function delUser(row)
+        {
+            if(!confirm('删除后不可恢复\n是否确认删除该主机？\n如果该主机所属宝塔无法正常访问将会删除失败！\n如果需要删除该宝塔的所有主机请前去宝塔列表删除宝塔即可！')){return;}
+            msloading('正在删除中，请稍后...');
+            let data = {};
+            data["gn"]="zjsc";
+            data["id"]=row.id;
+            $.post('./ajax.php', data, function (date) {
+                var jsoe= JSON.parse(date);
+                var qk= jsoe.code
+
+                if(qk=='删除成功'){
+                    $("#tb_departments").bootstrapTable('refreshOptions',{pageNumber:1});		//刷新表格
+                    msalert(1,'删除成功！',2000);
+                    msloadingde();
+                }else{
+                    msalert(4,qk,2000);
+                    msloadingde();
+                }
+            })
+        }
+
+</script>
+
+
+
+</body>
+</html>

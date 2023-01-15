@@ -2,24 +2,20 @@
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(require('jquery')) :
 	typeof define === 'function' && define.amd ? define(['jquery'], factory) :
 	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.jQuery));
-})(this, (function ($) { 'use strict';
+})(this, (function ($$1) { 'use strict';
 
 	function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
-	var $__default = /*#__PURE__*/_interopDefaultLegacy($);
+	var $__default = /*#__PURE__*/_interopDefaultLegacy($$1);
 
 	var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-	function createCommonjsModule(fn, module) {
-		return module = { exports: {} }, fn(module, module.exports), module.exports;
-	}
 
 	var check = function (it) {
 	  return it && it.Math == Math && it;
 	};
 
 	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-	var global_1 =
+	var global$a =
 	  // eslint-disable-next-line es/no-global-this -- safe
 	  check(typeof globalThis == 'object' && globalThis) ||
 	  check(typeof window == 'object' && window) ||
@@ -29,7 +25,9 @@
 	  // eslint-disable-next-line no-new-func -- fallback
 	  (function () { return this; })() || Function('return this')();
 
-	var fails = function (exec) {
+	var objectGetOwnPropertyDescriptor = {};
+
+	var fails$b = function (exec) {
 	  try {
 	    return !!exec();
 	  } catch (error) {
@@ -37,23 +35,32 @@
 	  }
 	};
 
+	var fails$a = fails$b;
+
 	// Detect IE8's incomplete defineProperty implementation
-	var descriptors = !fails(function () {
+	var descriptors = !fails$a(function () {
 	  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
 	  return Object.defineProperty({}, 1, { get: function () { return 7; } })[1] != 7;
 	});
 
-	var functionBindNative = !fails(function () {
+	var fails$9 = fails$b;
+
+	var functionBindNative = !fails$9(function () {
+	  // eslint-disable-next-line es/no-function-prototype-bind -- safe
 	  var test = (function () { /* empty */ }).bind();
 	  // eslint-disable-next-line no-prototype-builtins -- safe
 	  return typeof test != 'function' || test.hasOwnProperty('prototype');
 	});
 
-	var call$1 = Function.prototype.call;
+	var NATIVE_BIND$1 = functionBindNative;
 
-	var functionCall = functionBindNative ? call$1.bind(call$1) : function () {
-	  return call$1.apply(call$1, arguments);
+	var call$4 = Function.prototype.call;
+
+	var functionCall = NATIVE_BIND$1 ? call$4.bind(call$4) : function () {
+	  return call$4.apply(call$4, arguments);
 	};
+
+	var objectPropertyIsEnumerable = {};
 
 	var $propertyIsEnumerable = {}.propertyIsEnumerable;
 	// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
@@ -64,16 +71,12 @@
 
 	// `Object.prototype.propertyIsEnumerable` method implementation
 	// https://tc39.es/ecma262/#sec-object.prototype.propertyisenumerable
-	var f$4 = NASHORN_BUG ? function propertyIsEnumerable(V) {
+	objectPropertyIsEnumerable.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
 	  var descriptor = getOwnPropertyDescriptor$1(this, V);
 	  return !!descriptor && descriptor.enumerable;
 	} : $propertyIsEnumerable;
 
-	var objectPropertyIsEnumerable = {
-		f: f$4
-	};
-
-	var createPropertyDescriptor = function (bitmap, value) {
+	var createPropertyDescriptor$3 = function (bitmap, value) {
 	  return {
 	    enumerable: !(bitmap & 1),
 	    configurable: !(bitmap & 2),
@@ -82,79 +85,135 @@
 	  };
 	};
 
-	var FunctionPrototype$1 = Function.prototype;
-	var bind = FunctionPrototype$1.bind;
-	var call = FunctionPrototype$1.call;
-	var uncurryThis = functionBindNative && bind.bind(call, call);
+	var NATIVE_BIND = functionBindNative;
 
-	var functionUncurryThis = functionBindNative ? function (fn) {
-	  return fn && uncurryThis(fn);
-	} : function (fn) {
-	  return fn && function () {
-	    return call.apply(fn, arguments);
+	var FunctionPrototype$1 = Function.prototype;
+	var call$3 = FunctionPrototype$1.call;
+	var uncurryThisWithBind = NATIVE_BIND && FunctionPrototype$1.bind.bind(call$3, call$3);
+
+	var functionUncurryThisRaw = function (fn) {
+	  return NATIVE_BIND ? uncurryThisWithBind(fn) : function () {
+	    return call$3.apply(fn, arguments);
 	  };
 	};
 
-	var toString$1 = functionUncurryThis({}.toString);
-	var stringSlice = functionUncurryThis(''.slice);
+	var uncurryThisRaw$1 = functionUncurryThisRaw;
 
-	var classofRaw = function (it) {
+	var toString$1 = uncurryThisRaw$1({}.toString);
+	var stringSlice = uncurryThisRaw$1(''.slice);
+
+	var classofRaw$2 = function (it) {
 	  return stringSlice(toString$1(it), 8, -1);
 	};
 
-	var Object$4 = global_1.Object;
-	var split = functionUncurryThis(''.split);
+	var classofRaw$1 = classofRaw$2;
+	var uncurryThisRaw = functionUncurryThisRaw;
+
+	var functionUncurryThis = function (fn) {
+	  // Nashorn bug:
+	  //   https://github.com/zloirock/core-js/issues/1128
+	  //   https://github.com/zloirock/core-js/issues/1130
+	  if (classofRaw$1(fn) === 'Function') return uncurryThisRaw(fn);
+	};
+
+	var uncurryThis$7 = functionUncurryThis;
+	var fails$8 = fails$b;
+	var classof$3 = classofRaw$2;
+
+	var $Object$3 = Object;
+	var split = uncurryThis$7(''.split);
 
 	// fallback for non-array-like ES3 and non-enumerable old V8 strings
-	var indexedObject = fails(function () {
+	var indexedObject = fails$8(function () {
 	  // throws an error in rhino, see https://github.com/mozilla/rhino/issues/346
 	  // eslint-disable-next-line no-prototype-builtins -- safe
-	  return !Object$4('z').propertyIsEnumerable(0);
+	  return !$Object$3('z').propertyIsEnumerable(0);
 	}) ? function (it) {
-	  return classofRaw(it) == 'String' ? split(it, '') : Object$4(it);
-	} : Object$4;
+	  return classof$3(it) == 'String' ? split(it, '') : $Object$3(it);
+	} : $Object$3;
 
-	var TypeError$7 = global_1.TypeError;
+	// we can't use just `it == null` since of `document.all` special case
+	// https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot-aec
+	var isNullOrUndefined$2 = function (it) {
+	  return it === null || it === undefined;
+	};
+
+	var isNullOrUndefined$1 = isNullOrUndefined$2;
+
+	var $TypeError$6 = TypeError;
 
 	// `RequireObjectCoercible` abstract operation
 	// https://tc39.es/ecma262/#sec-requireobjectcoercible
-	var requireObjectCoercible = function (it) {
-	  if (it == undefined) throw TypeError$7("Can't call method on " + it);
+	var requireObjectCoercible$2 = function (it) {
+	  if (isNullOrUndefined$1(it)) throw $TypeError$6("Can't call method on " + it);
 	  return it;
 	};
 
 	// toObject with fallback for non-array-like ES3 strings
+	var IndexedObject = indexedObject;
+	var requireObjectCoercible$1 = requireObjectCoercible$2;
 
-
-
-	var toIndexedObject = function (it) {
-	  return indexedObject(requireObjectCoercible(it));
+	var toIndexedObject$3 = function (it) {
+	  return IndexedObject(requireObjectCoercible$1(it));
 	};
+
+	var documentAll$2 = typeof document == 'object' && document.all;
+
+	// https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot
+	var IS_HTMLDDA = typeof documentAll$2 == 'undefined' && documentAll$2 !== undefined;
+
+	var documentAll_1 = {
+	  all: documentAll$2,
+	  IS_HTMLDDA: IS_HTMLDDA
+	};
+
+	var $documentAll$1 = documentAll_1;
+
+	var documentAll$1 = $documentAll$1.all;
 
 	// `IsCallable` abstract operation
 	// https://tc39.es/ecma262/#sec-iscallable
-	var isCallable = function (argument) {
+	var isCallable$c = $documentAll$1.IS_HTMLDDA ? function (argument) {
+	  return typeof argument == 'function' || argument === documentAll$1;
+	} : function (argument) {
 	  return typeof argument == 'function';
 	};
 
-	var isObject = function (it) {
-	  return typeof it == 'object' ? it !== null : isCallable(it);
+	var isCallable$b = isCallable$c;
+	var $documentAll = documentAll_1;
+
+	var documentAll = $documentAll.all;
+
+	var isObject$7 = $documentAll.IS_HTMLDDA ? function (it) {
+	  return typeof it == 'object' ? it !== null : isCallable$b(it) || it === documentAll;
+	} : function (it) {
+	  return typeof it == 'object' ? it !== null : isCallable$b(it);
 	};
+
+	var global$9 = global$a;
+	var isCallable$a = isCallable$c;
 
 	var aFunction = function (argument) {
-	  return isCallable(argument) ? argument : undefined;
+	  return isCallable$a(argument) ? argument : undefined;
 	};
 
-	var getBuiltIn = function (namespace, method) {
-	  return arguments.length < 2 ? aFunction(global_1[namespace]) : global_1[namespace] && global_1[namespace][method];
+	var getBuiltIn$4 = function (namespace, method) {
+	  return arguments.length < 2 ? aFunction(global$9[namespace]) : global$9[namespace] && global$9[namespace][method];
 	};
 
-	var objectIsPrototypeOf = functionUncurryThis({}.isPrototypeOf);
+	var uncurryThis$6 = functionUncurryThis;
 
-	var engineUserAgent = getBuiltIn('navigator', 'userAgent') || '';
+	var objectIsPrototypeOf = uncurryThis$6({}.isPrototypeOf);
 
-	var process = global_1.process;
-	var Deno = global_1.Deno;
+	var getBuiltIn$3 = getBuiltIn$4;
+
+	var engineUserAgent = getBuiltIn$3('navigator', 'userAgent') || '';
+
+	var global$8 = global$a;
+	var userAgent = engineUserAgent;
+
+	var process = global$8.process;
+	var Deno = global$8.Deno;
 	var versions = process && process.versions || Deno && Deno.version;
 	var v8 = versions && versions.v8;
 	var match, version;
@@ -168,10 +227,10 @@
 
 	// BrowserFS NodeJS `process` polyfill incorrectly set `.v8` to `0.0`
 	// so check `userAgent` even if `.v8` exists, but 0
-	if (!version && engineUserAgent) {
-	  match = engineUserAgent.match(/Edge\/(\d+)/);
+	if (!version && userAgent) {
+	  match = userAgent.match(/Edge\/(\d+)/);
 	  if (!match || match[1] >= 74) {
-	    match = engineUserAgent.match(/Chrome\/(\d+)/);
+	    match = userAgent.match(/Chrome\/(\d+)/);
 	    if (match) version = +match[1];
 	  }
 	}
@@ -180,134 +239,173 @@
 
 	/* eslint-disable es/no-symbol -- required for testing */
 
-
+	var V8_VERSION$2 = engineV8Version;
+	var fails$7 = fails$b;
 
 	// eslint-disable-next-line es/no-object-getownpropertysymbols -- required for testing
-	var nativeSymbol = !!Object.getOwnPropertySymbols && !fails(function () {
+	var symbolConstructorDetection = !!Object.getOwnPropertySymbols && !fails$7(function () {
 	  var symbol = Symbol();
 	  // Chrome 38 Symbol has incorrect toString conversion
 	  // `get-own-property-symbols` polyfill symbols converted to object are not Symbol instances
 	  return !String(symbol) || !(Object(symbol) instanceof Symbol) ||
 	    // Chrome 38-40 symbols are not inherited from DOM collections prototypes to instances
-	    !Symbol.sham && engineV8Version && engineV8Version < 41;
+	    !Symbol.sham && V8_VERSION$2 && V8_VERSION$2 < 41;
 	});
 
 	/* eslint-disable es/no-symbol -- required for testing */
 
+	var NATIVE_SYMBOL$1 = symbolConstructorDetection;
 
-	var useSymbolAsUid = nativeSymbol
+	var useSymbolAsUid = NATIVE_SYMBOL$1
 	  && !Symbol.sham
 	  && typeof Symbol.iterator == 'symbol';
 
-	var Object$3 = global_1.Object;
+	var getBuiltIn$2 = getBuiltIn$4;
+	var isCallable$9 = isCallable$c;
+	var isPrototypeOf = objectIsPrototypeOf;
+	var USE_SYMBOL_AS_UID$1 = useSymbolAsUid;
 
-	var isSymbol = useSymbolAsUid ? function (it) {
+	var $Object$2 = Object;
+
+	var isSymbol$2 = USE_SYMBOL_AS_UID$1 ? function (it) {
 	  return typeof it == 'symbol';
 	} : function (it) {
-	  var $Symbol = getBuiltIn('Symbol');
-	  return isCallable($Symbol) && objectIsPrototypeOf($Symbol.prototype, Object$3(it));
+	  var $Symbol = getBuiltIn$2('Symbol');
+	  return isCallable$9($Symbol) && isPrototypeOf($Symbol.prototype, $Object$2(it));
 	};
 
-	var String$2 = global_1.String;
+	var $String$1 = String;
 
-	var tryToString = function (argument) {
+	var tryToString$1 = function (argument) {
 	  try {
-	    return String$2(argument);
+	    return $String$1(argument);
 	  } catch (error) {
 	    return 'Object';
 	  }
 	};
 
-	var TypeError$6 = global_1.TypeError;
+	var isCallable$8 = isCallable$c;
+	var tryToString = tryToString$1;
+
+	var $TypeError$5 = TypeError;
 
 	// `Assert: IsCallable(argument) is true`
-	var aCallable = function (argument) {
-	  if (isCallable(argument)) return argument;
-	  throw TypeError$6(tryToString(argument) + ' is not a function');
+	var aCallable$1 = function (argument) {
+	  if (isCallable$8(argument)) return argument;
+	  throw $TypeError$5(tryToString(argument) + ' is not a function');
 	};
+
+	var aCallable = aCallable$1;
+	var isNullOrUndefined = isNullOrUndefined$2;
 
 	// `GetMethod` abstract operation
 	// https://tc39.es/ecma262/#sec-getmethod
-	var getMethod = function (V, P) {
+	var getMethod$1 = function (V, P) {
 	  var func = V[P];
-	  return func == null ? undefined : aCallable(func);
+	  return isNullOrUndefined(func) ? undefined : aCallable(func);
 	};
 
-	var TypeError$5 = global_1.TypeError;
+	var call$2 = functionCall;
+	var isCallable$7 = isCallable$c;
+	var isObject$6 = isObject$7;
+
+	var $TypeError$4 = TypeError;
 
 	// `OrdinaryToPrimitive` abstract operation
 	// https://tc39.es/ecma262/#sec-ordinarytoprimitive
-	var ordinaryToPrimitive = function (input, pref) {
+	var ordinaryToPrimitive$1 = function (input, pref) {
 	  var fn, val;
-	  if (pref === 'string' && isCallable(fn = input.toString) && !isObject(val = functionCall(fn, input))) return val;
-	  if (isCallable(fn = input.valueOf) && !isObject(val = functionCall(fn, input))) return val;
-	  if (pref !== 'string' && isCallable(fn = input.toString) && !isObject(val = functionCall(fn, input))) return val;
-	  throw TypeError$5("Can't convert object to primitive value");
+	  if (pref === 'string' && isCallable$7(fn = input.toString) && !isObject$6(val = call$2(fn, input))) return val;
+	  if (isCallable$7(fn = input.valueOf) && !isObject$6(val = call$2(fn, input))) return val;
+	  if (pref !== 'string' && isCallable$7(fn = input.toString) && !isObject$6(val = call$2(fn, input))) return val;
+	  throw $TypeError$4("Can't convert object to primitive value");
 	};
 
-	// eslint-disable-next-line es/no-object-defineproperty -- safe
-	var defineProperty = Object.defineProperty;
+	var shared$3 = {exports: {}};
 
-	var setGlobal = function (key, value) {
+	var global$7 = global$a;
+
+	// eslint-disable-next-line es/no-object-defineproperty -- safe
+	var defineProperty$1 = Object.defineProperty;
+
+	var defineGlobalProperty$3 = function (key, value) {
 	  try {
-	    defineProperty(global_1, key, { value: value, configurable: true, writable: true });
+	    defineProperty$1(global$7, key, { value: value, configurable: true, writable: true });
 	  } catch (error) {
-	    global_1[key] = value;
+	    global$7[key] = value;
 	  } return value;
 	};
 
+	var global$6 = global$a;
+	var defineGlobalProperty$2 = defineGlobalProperty$3;
+
 	var SHARED = '__core-js_shared__';
-	var store$1 = global_1[SHARED] || setGlobal(SHARED, {});
+	var store$3 = global$6[SHARED] || defineGlobalProperty$2(SHARED, {});
 
-	var sharedStore = store$1;
+	var sharedStore = store$3;
 
-	var shared = createCommonjsModule(function (module) {
-	(module.exports = function (key, value) {
-	  return sharedStore[key] || (sharedStore[key] = value !== undefined ? value : {});
+	var store$2 = sharedStore;
+
+	(shared$3.exports = function (key, value) {
+	  return store$2[key] || (store$2[key] = value !== undefined ? value : {});
 	})('versions', []).push({
-	  version: '3.21.1',
+	  version: '3.25.5',
 	  mode: 'global',
 	  copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
-	  license: 'https://github.com/zloirock/core-js/blob/v3.21.1/LICENSE',
+	  license: 'https://github.com/zloirock/core-js/blob/v3.25.5/LICENSE',
 	  source: 'https://github.com/zloirock/core-js'
 	});
-	});
 
-	var Object$2 = global_1.Object;
+	var requireObjectCoercible = requireObjectCoercible$2;
+
+	var $Object$1 = Object;
 
 	// `ToObject` abstract operation
 	// https://tc39.es/ecma262/#sec-toobject
-	var toObject = function (argument) {
-	  return Object$2(requireObjectCoercible(argument));
+	var toObject$2 = function (argument) {
+	  return $Object$1(requireObjectCoercible(argument));
 	};
 
-	var hasOwnProperty = functionUncurryThis({}.hasOwnProperty);
+	var uncurryThis$5 = functionUncurryThis;
+	var toObject$1 = toObject$2;
+
+	var hasOwnProperty = uncurryThis$5({}.hasOwnProperty);
 
 	// `HasOwnProperty` abstract operation
 	// https://tc39.es/ecma262/#sec-hasownproperty
+	// eslint-disable-next-line es/no-object-hasown -- safe
 	var hasOwnProperty_1 = Object.hasOwn || function hasOwn(it, key) {
-	  return hasOwnProperty(toObject(it), key);
+	  return hasOwnProperty(toObject$1(it), key);
 	};
+
+	var uncurryThis$4 = functionUncurryThis;
 
 	var id = 0;
 	var postfix = Math.random();
-	var toString = functionUncurryThis(1.0.toString);
+	var toString = uncurryThis$4(1.0.toString);
 
-	var uid = function (key) {
+	var uid$2 = function (key) {
 	  return 'Symbol(' + (key === undefined ? '' : key) + ')_' + toString(++id + postfix, 36);
 	};
 
-	var WellKnownSymbolsStore = shared('wks');
-	var Symbol$1 = global_1.Symbol;
-	var symbolFor = Symbol$1 && Symbol$1['for'];
-	var createWellKnownSymbol = useSymbolAsUid ? Symbol$1 : Symbol$1 && Symbol$1.withoutSetter || uid;
+	var global$5 = global$a;
+	var shared$2 = shared$3.exports;
+	var hasOwn$6 = hasOwnProperty_1;
+	var uid$1 = uid$2;
+	var NATIVE_SYMBOL = symbolConstructorDetection;
+	var USE_SYMBOL_AS_UID = useSymbolAsUid;
 
-	var wellKnownSymbol = function (name) {
-	  if (!hasOwnProperty_1(WellKnownSymbolsStore, name) || !(nativeSymbol || typeof WellKnownSymbolsStore[name] == 'string')) {
+	var WellKnownSymbolsStore = shared$2('wks');
+	var Symbol$1 = global$5.Symbol;
+	var symbolFor = Symbol$1 && Symbol$1['for'];
+	var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol$1 : Symbol$1 && Symbol$1.withoutSetter || uid$1;
+
+	var wellKnownSymbol$6 = function (name) {
+	  if (!hasOwn$6(WellKnownSymbolsStore, name) || !(NATIVE_SYMBOL || typeof WellKnownSymbolsStore[name] == 'string')) {
 	    var description = 'Symbol.' + name;
-	    if (nativeSymbol && hasOwnProperty_1(Symbol$1, name)) {
+	    if (NATIVE_SYMBOL && hasOwn$6(Symbol$1, name)) {
 	      WellKnownSymbolsStore[name] = Symbol$1[name];
-	    } else if (useSymbolAsUid && symbolFor) {
+	    } else if (USE_SYMBOL_AS_UID && symbolFor) {
 	      WellKnownSymbolsStore[name] = symbolFor(description);
 	    } else {
 	      WellKnownSymbolsStore[name] = createWellKnownSymbol(description);
@@ -315,69 +413,96 @@
 	  } return WellKnownSymbolsStore[name];
 	};
 
-	var TypeError$4 = global_1.TypeError;
-	var TO_PRIMITIVE = wellKnownSymbol('toPrimitive');
+	var call$1 = functionCall;
+	var isObject$5 = isObject$7;
+	var isSymbol$1 = isSymbol$2;
+	var getMethod = getMethod$1;
+	var ordinaryToPrimitive = ordinaryToPrimitive$1;
+	var wellKnownSymbol$5 = wellKnownSymbol$6;
+
+	var $TypeError$3 = TypeError;
+	var TO_PRIMITIVE = wellKnownSymbol$5('toPrimitive');
 
 	// `ToPrimitive` abstract operation
 	// https://tc39.es/ecma262/#sec-toprimitive
-	var toPrimitive = function (input, pref) {
-	  if (!isObject(input) || isSymbol(input)) return input;
+	var toPrimitive$1 = function (input, pref) {
+	  if (!isObject$5(input) || isSymbol$1(input)) return input;
 	  var exoticToPrim = getMethod(input, TO_PRIMITIVE);
 	  var result;
 	  if (exoticToPrim) {
 	    if (pref === undefined) pref = 'default';
-	    result = functionCall(exoticToPrim, input, pref);
-	    if (!isObject(result) || isSymbol(result)) return result;
-	    throw TypeError$4("Can't convert object to primitive value");
+	    result = call$1(exoticToPrim, input, pref);
+	    if (!isObject$5(result) || isSymbol$1(result)) return result;
+	    throw $TypeError$3("Can't convert object to primitive value");
 	  }
 	  if (pref === undefined) pref = 'number';
 	  return ordinaryToPrimitive(input, pref);
 	};
 
+	var toPrimitive = toPrimitive$1;
+	var isSymbol = isSymbol$2;
+
 	// `ToPropertyKey` abstract operation
 	// https://tc39.es/ecma262/#sec-topropertykey
-	var toPropertyKey = function (argument) {
+	var toPropertyKey$3 = function (argument) {
 	  var key = toPrimitive(argument, 'string');
 	  return isSymbol(key) ? key : key + '';
 	};
 
-	var document = global_1.document;
+	var global$4 = global$a;
+	var isObject$4 = isObject$7;
+
+	var document$1 = global$4.document;
 	// typeof document.createElement is 'object' in old IE
-	var EXISTS$1 = isObject(document) && isObject(document.createElement);
+	var EXISTS$1 = isObject$4(document$1) && isObject$4(document$1.createElement);
 
 	var documentCreateElement = function (it) {
-	  return EXISTS$1 ? document.createElement(it) : {};
+	  return EXISTS$1 ? document$1.createElement(it) : {};
 	};
 
+	var DESCRIPTORS$6 = descriptors;
+	var fails$6 = fails$b;
+	var createElement = documentCreateElement;
+
 	// Thanks to IE8 for its funny defineProperty
-	var ie8DomDefine = !descriptors && !fails(function () {
+	var ie8DomDefine = !DESCRIPTORS$6 && !fails$6(function () {
 	  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
-	  return Object.defineProperty(documentCreateElement('div'), 'a', {
+	  return Object.defineProperty(createElement('div'), 'a', {
 	    get: function () { return 7; }
 	  }).a != 7;
 	});
+
+	var DESCRIPTORS$5 = descriptors;
+	var call = functionCall;
+	var propertyIsEnumerableModule = objectPropertyIsEnumerable;
+	var createPropertyDescriptor$2 = createPropertyDescriptor$3;
+	var toIndexedObject$2 = toIndexedObject$3;
+	var toPropertyKey$2 = toPropertyKey$3;
+	var hasOwn$5 = hasOwnProperty_1;
+	var IE8_DOM_DEFINE$1 = ie8DomDefine;
 
 	// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 	var $getOwnPropertyDescriptor$1 = Object.getOwnPropertyDescriptor;
 
 	// `Object.getOwnPropertyDescriptor` method
 	// https://tc39.es/ecma262/#sec-object.getownpropertydescriptor
-	var f$3 = descriptors ? $getOwnPropertyDescriptor$1 : function getOwnPropertyDescriptor(O, P) {
-	  O = toIndexedObject(O);
-	  P = toPropertyKey(P);
-	  if (ie8DomDefine) try {
+	objectGetOwnPropertyDescriptor.f = DESCRIPTORS$5 ? $getOwnPropertyDescriptor$1 : function getOwnPropertyDescriptor(O, P) {
+	  O = toIndexedObject$2(O);
+	  P = toPropertyKey$2(P);
+	  if (IE8_DOM_DEFINE$1) try {
 	    return $getOwnPropertyDescriptor$1(O, P);
 	  } catch (error) { /* empty */ }
-	  if (hasOwnProperty_1(O, P)) return createPropertyDescriptor(!functionCall(objectPropertyIsEnumerable.f, O, P), O[P]);
+	  if (hasOwn$5(O, P)) return createPropertyDescriptor$2(!call(propertyIsEnumerableModule.f, O, P), O[P]);
 	};
 
-	var objectGetOwnPropertyDescriptor = {
-		f: f$3
-	};
+	var objectDefineProperty = {};
+
+	var DESCRIPTORS$4 = descriptors;
+	var fails$5 = fails$b;
 
 	// V8 ~ Chrome 36-
 	// https://bugs.chromium.org/p/v8/issues/detail?id=3334
-	var v8PrototypeDefineBug = descriptors && fails(function () {
+	var v8PrototypeDefineBug = DESCRIPTORS$4 && fails$5(function () {
 	  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
 	  return Object.defineProperty(function () { /* empty */ }, 'prototype', {
 	    value: 42,
@@ -385,16 +510,24 @@
 	  }).prototype != 42;
 	});
 
-	var String$1 = global_1.String;
-	var TypeError$3 = global_1.TypeError;
+	var isObject$3 = isObject$7;
+
+	var $String = String;
+	var $TypeError$2 = TypeError;
 
 	// `Assert: Type(argument) is Object`
-	var anObject = function (argument) {
-	  if (isObject(argument)) return argument;
-	  throw TypeError$3(String$1(argument) + ' is not an object');
+	var anObject$2 = function (argument) {
+	  if (isObject$3(argument)) return argument;
+	  throw $TypeError$2($String(argument) + ' is not an object');
 	};
 
-	var TypeError$2 = global_1.TypeError;
+	var DESCRIPTORS$3 = descriptors;
+	var IE8_DOM_DEFINE = ie8DomDefine;
+	var V8_PROTOTYPE_DEFINE_BUG = v8PrototypeDefineBug;
+	var anObject$1 = anObject$2;
+	var toPropertyKey$1 = toPropertyKey$3;
+
+	var $TypeError$1 = TypeError;
 	// eslint-disable-next-line es/no-object-defineproperty -- safe
 	var $defineProperty = Object.defineProperty;
 	// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
@@ -405,10 +538,10 @@
 
 	// `Object.defineProperty` method
 	// https://tc39.es/ecma262/#sec-object.defineproperty
-	var f$2 = descriptors ? v8PrototypeDefineBug ? function defineProperty(O, P, Attributes) {
-	  anObject(O);
-	  P = toPropertyKey(P);
-	  anObject(Attributes);
+	objectDefineProperty.f = DESCRIPTORS$3 ? V8_PROTOTYPE_DEFINE_BUG ? function defineProperty(O, P, Attributes) {
+	  anObject$1(O);
+	  P = toPropertyKey$1(P);
+	  anObject$1(Attributes);
 	  if (typeof O === 'function' && P === 'prototype' && 'value' in Attributes && WRITABLE in Attributes && !Attributes[WRITABLE]) {
 	    var current = $getOwnPropertyDescriptor(O, P);
 	    if (current && current[WRITABLE]) {
@@ -421,54 +554,93 @@
 	    }
 	  } return $defineProperty(O, P, Attributes);
 	} : $defineProperty : function defineProperty(O, P, Attributes) {
-	  anObject(O);
-	  P = toPropertyKey(P);
-	  anObject(Attributes);
-	  if (ie8DomDefine) try {
+	  anObject$1(O);
+	  P = toPropertyKey$1(P);
+	  anObject$1(Attributes);
+	  if (IE8_DOM_DEFINE) try {
 	    return $defineProperty(O, P, Attributes);
 	  } catch (error) { /* empty */ }
-	  if ('get' in Attributes || 'set' in Attributes) throw TypeError$2('Accessors not supported');
+	  if ('get' in Attributes || 'set' in Attributes) throw $TypeError$1('Accessors not supported');
 	  if ('value' in Attributes) O[P] = Attributes.value;
 	  return O;
 	};
 
-	var objectDefineProperty = {
-		f: f$2
-	};
+	var DESCRIPTORS$2 = descriptors;
+	var definePropertyModule$3 = objectDefineProperty;
+	var createPropertyDescriptor$1 = createPropertyDescriptor$3;
 
-	var createNonEnumerableProperty = descriptors ? function (object, key, value) {
-	  return objectDefineProperty.f(object, key, createPropertyDescriptor(1, value));
+	var createNonEnumerableProperty$2 = DESCRIPTORS$2 ? function (object, key, value) {
+	  return definePropertyModule$3.f(object, key, createPropertyDescriptor$1(1, value));
 	} : function (object, key, value) {
 	  object[key] = value;
 	  return object;
 	};
 
-	var functionToString = functionUncurryThis(Function.toString);
+	var makeBuiltIn$2 = {exports: {}};
+
+	var DESCRIPTORS$1 = descriptors;
+	var hasOwn$4 = hasOwnProperty_1;
+
+	var FunctionPrototype = Function.prototype;
+	// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+	var getDescriptor = DESCRIPTORS$1 && Object.getOwnPropertyDescriptor;
+
+	var EXISTS = hasOwn$4(FunctionPrototype, 'name');
+	// additional protection from minified / mangled / dropped function names
+	var PROPER = EXISTS && (function something() { /* empty */ }).name === 'something';
+	var CONFIGURABLE = EXISTS && (!DESCRIPTORS$1 || (DESCRIPTORS$1 && getDescriptor(FunctionPrototype, 'name').configurable));
+
+	var functionName = {
+	  EXISTS: EXISTS,
+	  PROPER: PROPER,
+	  CONFIGURABLE: CONFIGURABLE
+	};
+
+	var uncurryThis$3 = functionUncurryThis;
+	var isCallable$6 = isCallable$c;
+	var store$1 = sharedStore;
+
+	var functionToString = uncurryThis$3(Function.toString);
 
 	// this helper broken in `core-js@3.4.1-3.4.4`, so we can't use `shared` helper
-	if (!isCallable(sharedStore.inspectSource)) {
-	  sharedStore.inspectSource = function (it) {
+	if (!isCallable$6(store$1.inspectSource)) {
+	  store$1.inspectSource = function (it) {
 	    return functionToString(it);
 	  };
 	}
 
-	var inspectSource = sharedStore.inspectSource;
+	var inspectSource$2 = store$1.inspectSource;
 
-	var WeakMap$1 = global_1.WeakMap;
+	var global$3 = global$a;
+	var isCallable$5 = isCallable$c;
 
-	var nativeWeakMap = isCallable(WeakMap$1) && /native code/.test(inspectSource(WeakMap$1));
+	var WeakMap$1 = global$3.WeakMap;
 
-	var keys = shared('keys');
+	var weakMapBasicDetection = isCallable$5(WeakMap$1) && /native code/.test(String(WeakMap$1));
 
-	var sharedKey = function (key) {
+	var shared$1 = shared$3.exports;
+	var uid = uid$2;
+
+	var keys = shared$1('keys');
+
+	var sharedKey$1 = function (key) {
 	  return keys[key] || (keys[key] = uid(key));
 	};
 
-	var hiddenKeys$1 = {};
+	var hiddenKeys$3 = {};
+
+	var NATIVE_WEAK_MAP = weakMapBasicDetection;
+	var global$2 = global$a;
+	var isObject$2 = isObject$7;
+	var createNonEnumerableProperty$1 = createNonEnumerableProperty$2;
+	var hasOwn$3 = hasOwnProperty_1;
+	var shared = sharedStore;
+	var sharedKey = sharedKey$1;
+	var hiddenKeys$2 = hiddenKeys$3;
 
 	var OBJECT_ALREADY_INITIALIZED = 'Object already initialized';
-	var TypeError$1 = global_1.TypeError;
-	var WeakMap = global_1.WeakMap;
+	var TypeError$1 = global$2.TypeError;
+	var WeakMap = global$2.WeakMap;
 	var set, get, has;
 
 	var enforce = function (it) {
@@ -478,43 +650,45 @@
 	var getterFor = function (TYPE) {
 	  return function (it) {
 	    var state;
-	    if (!isObject(it) || (state = get(it)).type !== TYPE) {
+	    if (!isObject$2(it) || (state = get(it)).type !== TYPE) {
 	      throw TypeError$1('Incompatible receiver, ' + TYPE + ' required');
 	    } return state;
 	  };
 	};
 
-	if (nativeWeakMap || sharedStore.state) {
-	  var store = sharedStore.state || (sharedStore.state = new WeakMap());
-	  var wmget = functionUncurryThis(store.get);
-	  var wmhas = functionUncurryThis(store.has);
-	  var wmset = functionUncurryThis(store.set);
+	if (NATIVE_WEAK_MAP || shared.state) {
+	  var store = shared.state || (shared.state = new WeakMap());
+	  /* eslint-disable no-self-assign -- prototype methods protection */
+	  store.get = store.get;
+	  store.has = store.has;
+	  store.set = store.set;
+	  /* eslint-enable no-self-assign -- prototype methods protection */
 	  set = function (it, metadata) {
-	    if (wmhas(store, it)) throw new TypeError$1(OBJECT_ALREADY_INITIALIZED);
+	    if (store.has(it)) throw TypeError$1(OBJECT_ALREADY_INITIALIZED);
 	    metadata.facade = it;
-	    wmset(store, it, metadata);
+	    store.set(it, metadata);
 	    return metadata;
 	  };
 	  get = function (it) {
-	    return wmget(store, it) || {};
+	    return store.get(it) || {};
 	  };
 	  has = function (it) {
-	    return wmhas(store, it);
+	    return store.has(it);
 	  };
 	} else {
 	  var STATE = sharedKey('state');
-	  hiddenKeys$1[STATE] = true;
+	  hiddenKeys$2[STATE] = true;
 	  set = function (it, metadata) {
-	    if (hasOwnProperty_1(it, STATE)) throw new TypeError$1(OBJECT_ALREADY_INITIALIZED);
+	    if (hasOwn$3(it, STATE)) throw TypeError$1(OBJECT_ALREADY_INITIALIZED);
 	    metadata.facade = it;
-	    createNonEnumerableProperty(it, STATE, metadata);
+	    createNonEnumerableProperty$1(it, STATE, metadata);
 	    return metadata;
 	  };
 	  get = function (it) {
-	    return hasOwnProperty_1(it, STATE) ? it[STATE] : {};
+	    return hasOwn$3(it, STATE) ? it[STATE] : {};
 	  };
 	  has = function (it) {
-	    return hasOwnProperty_1(it, STATE);
+	    return hasOwn$3(it, STATE);
 	  };
 	}
 
@@ -526,73 +700,108 @@
 	  getterFor: getterFor
 	};
 
-	var FunctionPrototype = Function.prototype;
-	// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
-	var getDescriptor = descriptors && Object.getOwnPropertyDescriptor;
-
-	var EXISTS = hasOwnProperty_1(FunctionPrototype, 'name');
-	// additional protection from minified / mangled / dropped function names
-	var PROPER = EXISTS && (function something() { /* empty */ }).name === 'something';
-	var CONFIGURABLE = EXISTS && (!descriptors || (descriptors && getDescriptor(FunctionPrototype, 'name').configurable));
-
-	var functionName = {
-	  EXISTS: EXISTS,
-	  PROPER: PROPER,
-	  CONFIGURABLE: CONFIGURABLE
-	};
-
-	var redefine = createCommonjsModule(function (module) {
+	var fails$4 = fails$b;
+	var isCallable$4 = isCallable$c;
+	var hasOwn$2 = hasOwnProperty_1;
+	var DESCRIPTORS = descriptors;
 	var CONFIGURABLE_FUNCTION_NAME = functionName.CONFIGURABLE;
+	var inspectSource$1 = inspectSource$2;
+	var InternalStateModule = internalState;
 
-	var getInternalState = internalState.get;
-	var enforceInternalState = internalState.enforce;
+	var enforceInternalState = InternalStateModule.enforce;
+	var getInternalState = InternalStateModule.get;
+	// eslint-disable-next-line es/no-object-defineproperty -- safe
+	var defineProperty = Object.defineProperty;
+
+	var CONFIGURABLE_LENGTH = DESCRIPTORS && !fails$4(function () {
+	  return defineProperty(function () { /* empty */ }, 'length', { value: 8 }).length !== 8;
+	});
+
 	var TEMPLATE = String(String).split('String');
 
-	(module.exports = function (O, key, value, options) {
-	  var unsafe = options ? !!options.unsafe : false;
-	  var simple = options ? !!options.enumerable : false;
-	  var noTargetGet = options ? !!options.noTargetGet : false;
-	  var name = options && options.name !== undefined ? options.name : key;
-	  var state;
-	  if (isCallable(value)) {
-	    if (String(name).slice(0, 7) === 'Symbol(') {
-	      name = '[' + String(name).replace(/^Symbol\(([^)]*)\)/, '$1') + ']';
-	    }
-	    if (!hasOwnProperty_1(value, 'name') || (CONFIGURABLE_FUNCTION_NAME && value.name !== name)) {
-	      createNonEnumerableProperty(value, 'name', name);
-	    }
-	    state = enforceInternalState(value);
-	    if (!state.source) {
-	      state.source = TEMPLATE.join(typeof name == 'string' ? name : '');
-	    }
+	var makeBuiltIn$1 = makeBuiltIn$2.exports = function (value, name, options) {
+	  if (String(name).slice(0, 7) === 'Symbol(') {
+	    name = '[' + String(name).replace(/^Symbol\(([^)]*)\)/, '$1') + ']';
 	  }
-	  if (O === global_1) {
-	    if (simple) O[key] = value;
-	    else setGlobal(key, value);
-	    return;
-	  } else if (!unsafe) {
-	    delete O[key];
-	  } else if (!noTargetGet && O[key]) {
-	    simple = true;
+	  if (options && options.getter) name = 'get ' + name;
+	  if (options && options.setter) name = 'set ' + name;
+	  if (!hasOwn$2(value, 'name') || (CONFIGURABLE_FUNCTION_NAME && value.name !== name)) {
+	    if (DESCRIPTORS) defineProperty(value, 'name', { value: name, configurable: true });
+	    else value.name = name;
 	  }
-	  if (simple) O[key] = value;
-	  else createNonEnumerableProperty(O, key, value);
+	  if (CONFIGURABLE_LENGTH && options && hasOwn$2(options, 'arity') && value.length !== options.arity) {
+	    defineProperty(value, 'length', { value: options.arity });
+	  }
+	  try {
+	    if (options && hasOwn$2(options, 'constructor') && options.constructor) {
+	      if (DESCRIPTORS) defineProperty(value, 'prototype', { writable: false });
+	    // in V8 ~ Chrome 53, prototypes of some methods, like `Array.prototype.values`, are non-writable
+	    } else if (value.prototype) value.prototype = undefined;
+	  } catch (error) { /* empty */ }
+	  var state = enforceInternalState(value);
+	  if (!hasOwn$2(state, 'source')) {
+	    state.source = TEMPLATE.join(typeof name == 'string' ? name : '');
+	  } return value;
+	};
+
 	// add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative
-	})(Function.prototype, 'toString', function toString() {
-	  return isCallable(this) && getInternalState(this).source || inspectSource(this);
-	});
-	});
+	// eslint-disable-next-line no-extend-native -- required
+	Function.prototype.toString = makeBuiltIn$1(function toString() {
+	  return isCallable$4(this) && getInternalState(this).source || inspectSource$1(this);
+	}, 'toString');
+
+	var isCallable$3 = isCallable$c;
+	var definePropertyModule$2 = objectDefineProperty;
+	var makeBuiltIn = makeBuiltIn$2.exports;
+	var defineGlobalProperty$1 = defineGlobalProperty$3;
+
+	var defineBuiltIn$1 = function (O, key, value, options) {
+	  if (!options) options = {};
+	  var simple = options.enumerable;
+	  var name = options.name !== undefined ? options.name : key;
+	  if (isCallable$3(value)) makeBuiltIn(value, name, options);
+	  if (options.global) {
+	    if (simple) O[key] = value;
+	    else defineGlobalProperty$1(key, value);
+	  } else {
+	    try {
+	      if (!options.unsafe) delete O[key];
+	      else if (O[key]) simple = true;
+	    } catch (error) { /* empty */ }
+	    if (simple) O[key] = value;
+	    else definePropertyModule$2.f(O, key, {
+	      value: value,
+	      enumerable: false,
+	      configurable: !options.nonConfigurable,
+	      writable: !options.nonWritable
+	    });
+	  } return O;
+	};
+
+	var objectGetOwnPropertyNames = {};
 
 	var ceil = Math.ceil;
 	var floor = Math.floor;
 
+	// `Math.trunc` method
+	// https://tc39.es/ecma262/#sec-math.trunc
+	// eslint-disable-next-line es/no-math-trunc -- safe
+	var mathTrunc = Math.trunc || function trunc(x) {
+	  var n = +x;
+	  return (n > 0 ? floor : ceil)(n);
+	};
+
+	var trunc = mathTrunc;
+
 	// `ToIntegerOrInfinity` abstract operation
 	// https://tc39.es/ecma262/#sec-tointegerorinfinity
-	var toIntegerOrInfinity = function (argument) {
+	var toIntegerOrInfinity$2 = function (argument) {
 	  var number = +argument;
-	  // eslint-disable-next-line no-self-compare -- safe
-	  return number !== number || number === 0 ? 0 : (number > 0 ? floor : ceil)(number);
+	  // eslint-disable-next-line no-self-compare -- NaN check
+	  return number !== number || number === 0 ? 0 : trunc(number);
 	};
+
+	var toIntegerOrInfinity$1 = toIntegerOrInfinity$2;
 
 	var max = Math.max;
 	var min$1 = Math.min;
@@ -600,30 +809,38 @@
 	// Helper for a popular repeating case of the spec:
 	// Let integer be ? ToInteger(index).
 	// If integer < 0, let result be max((length + integer), 0); else let result be min(integer, length).
-	var toAbsoluteIndex = function (index, length) {
-	  var integer = toIntegerOrInfinity(index);
+	var toAbsoluteIndex$1 = function (index, length) {
+	  var integer = toIntegerOrInfinity$1(index);
 	  return integer < 0 ? max(integer + length, 0) : min$1(integer, length);
 	};
+
+	var toIntegerOrInfinity = toIntegerOrInfinity$2;
 
 	var min = Math.min;
 
 	// `ToLength` abstract operation
 	// https://tc39.es/ecma262/#sec-tolength
-	var toLength = function (argument) {
+	var toLength$1 = function (argument) {
 	  return argument > 0 ? min(toIntegerOrInfinity(argument), 0x1FFFFFFFFFFFFF) : 0; // 2 ** 53 - 1 == 9007199254740991
 	};
 
+	var toLength = toLength$1;
+
 	// `LengthOfArrayLike` abstract operation
 	// https://tc39.es/ecma262/#sec-lengthofarraylike
-	var lengthOfArrayLike = function (obj) {
+	var lengthOfArrayLike$2 = function (obj) {
 	  return toLength(obj.length);
 	};
+
+	var toIndexedObject$1 = toIndexedObject$3;
+	var toAbsoluteIndex = toAbsoluteIndex$1;
+	var lengthOfArrayLike$1 = lengthOfArrayLike$2;
 
 	// `Array.prototype.{ indexOf, includes }` methods implementation
 	var createMethod = function (IS_INCLUDES) {
 	  return function ($this, el, fromIndex) {
-	    var O = toIndexedObject($this);
-	    var length = lengthOfArrayLike(O);
+	    var O = toIndexedObject$1($this);
+	    var length = lengthOfArrayLike$1(O);
 	    var index = toAbsoluteIndex(fromIndex, length);
 	    var value;
 	    // Array#includes uses SameValueZero equality algorithm
@@ -648,26 +865,29 @@
 	  indexOf: createMethod(false)
 	};
 
+	var uncurryThis$2 = functionUncurryThis;
+	var hasOwn$1 = hasOwnProperty_1;
+	var toIndexedObject = toIndexedObject$3;
 	var indexOf = arrayIncludes.indexOf;
+	var hiddenKeys$1 = hiddenKeys$3;
 
-
-	var push = functionUncurryThis([].push);
+	var push = uncurryThis$2([].push);
 
 	var objectKeysInternal = function (object, names) {
 	  var O = toIndexedObject(object);
 	  var i = 0;
 	  var result = [];
 	  var key;
-	  for (key in O) !hasOwnProperty_1(hiddenKeys$1, key) && hasOwnProperty_1(O, key) && push(result, key);
+	  for (key in O) !hasOwn$1(hiddenKeys$1, key) && hasOwn$1(O, key) && push(result, key);
 	  // Don't enum bug & hidden keys
-	  while (names.length > i) if (hasOwnProperty_1(O, key = names[i++])) {
+	  while (names.length > i) if (hasOwn$1(O, key = names[i++])) {
 	    ~indexOf(result, key) || push(result, key);
 	  }
 	  return result;
 	};
 
 	// IE8- don't enum bug keys
-	var enumBugKeys = [
+	var enumBugKeys$1 = [
 	  'constructor',
 	  'hasOwnProperty',
 	  'isPrototypeOf',
@@ -677,88 +897,100 @@
 	  'valueOf'
 	];
 
+	var internalObjectKeys = objectKeysInternal;
+	var enumBugKeys = enumBugKeys$1;
+
 	var hiddenKeys = enumBugKeys.concat('length', 'prototype');
 
 	// `Object.getOwnPropertyNames` method
 	// https://tc39.es/ecma262/#sec-object.getownpropertynames
 	// eslint-disable-next-line es/no-object-getownpropertynames -- safe
-	var f$1 = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
-	  return objectKeysInternal(O, hiddenKeys);
+	objectGetOwnPropertyNames.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
+	  return internalObjectKeys(O, hiddenKeys);
 	};
 
-	var objectGetOwnPropertyNames = {
-		f: f$1
-	};
+	var objectGetOwnPropertySymbols = {};
 
 	// eslint-disable-next-line es/no-object-getownpropertysymbols -- safe
-	var f = Object.getOwnPropertySymbols;
+	objectGetOwnPropertySymbols.f = Object.getOwnPropertySymbols;
 
-	var objectGetOwnPropertySymbols = {
-		f: f
-	};
+	var getBuiltIn$1 = getBuiltIn$4;
+	var uncurryThis$1 = functionUncurryThis;
+	var getOwnPropertyNamesModule = objectGetOwnPropertyNames;
+	var getOwnPropertySymbolsModule = objectGetOwnPropertySymbols;
+	var anObject = anObject$2;
 
-	var concat = functionUncurryThis([].concat);
+	var concat = uncurryThis$1([].concat);
 
 	// all object keys, includes non-enumerable and symbols
-	var ownKeys = getBuiltIn('Reflect', 'ownKeys') || function ownKeys(it) {
-	  var keys = objectGetOwnPropertyNames.f(anObject(it));
-	  var getOwnPropertySymbols = objectGetOwnPropertySymbols.f;
+	var ownKeys$1 = getBuiltIn$1('Reflect', 'ownKeys') || function ownKeys(it) {
+	  var keys = getOwnPropertyNamesModule.f(anObject(it));
+	  var getOwnPropertySymbols = getOwnPropertySymbolsModule.f;
 	  return getOwnPropertySymbols ? concat(keys, getOwnPropertySymbols(it)) : keys;
 	};
 
-	var copyConstructorProperties = function (target, source, exceptions) {
+	var hasOwn = hasOwnProperty_1;
+	var ownKeys = ownKeys$1;
+	var getOwnPropertyDescriptorModule = objectGetOwnPropertyDescriptor;
+	var definePropertyModule$1 = objectDefineProperty;
+
+	var copyConstructorProperties$1 = function (target, source, exceptions) {
 	  var keys = ownKeys(source);
-	  var defineProperty = objectDefineProperty.f;
-	  var getOwnPropertyDescriptor = objectGetOwnPropertyDescriptor.f;
+	  var defineProperty = definePropertyModule$1.f;
+	  var getOwnPropertyDescriptor = getOwnPropertyDescriptorModule.f;
 	  for (var i = 0; i < keys.length; i++) {
 	    var key = keys[i];
-	    if (!hasOwnProperty_1(target, key) && !(exceptions && hasOwnProperty_1(exceptions, key))) {
+	    if (!hasOwn(target, key) && !(exceptions && hasOwn(exceptions, key))) {
 	      defineProperty(target, key, getOwnPropertyDescriptor(source, key));
 	    }
 	  }
 	};
 
+	var fails$3 = fails$b;
+	var isCallable$2 = isCallable$c;
+
 	var replacement = /#|\.prototype\./;
 
-	var isForced = function (feature, detection) {
+	var isForced$1 = function (feature, detection) {
 	  var value = data[normalize(feature)];
 	  return value == POLYFILL ? true
 	    : value == NATIVE ? false
-	    : isCallable(detection) ? fails(detection)
+	    : isCallable$2(detection) ? fails$3(detection)
 	    : !!detection;
 	};
 
-	var normalize = isForced.normalize = function (string) {
+	var normalize = isForced$1.normalize = function (string) {
 	  return String(string).replace(replacement, '.').toLowerCase();
 	};
 
-	var data = isForced.data = {};
-	var NATIVE = isForced.NATIVE = 'N';
-	var POLYFILL = isForced.POLYFILL = 'P';
+	var data = isForced$1.data = {};
+	var NATIVE = isForced$1.NATIVE = 'N';
+	var POLYFILL = isForced$1.POLYFILL = 'P';
 
-	var isForced_1 = isForced;
+	var isForced_1 = isForced$1;
 
+	var global$1 = global$a;
 	var getOwnPropertyDescriptor = objectGetOwnPropertyDescriptor.f;
-
-
-
-
-
+	var createNonEnumerableProperty = createNonEnumerableProperty$2;
+	var defineBuiltIn = defineBuiltIn$1;
+	var defineGlobalProperty = defineGlobalProperty$3;
+	var copyConstructorProperties = copyConstructorProperties$1;
+	var isForced = isForced_1;
 
 	/*
-	  options.target      - name of the target object
-	  options.global      - target is the global object
-	  options.stat        - export as static methods of target
-	  options.proto       - export as prototype methods of target
-	  options.real        - real prototype method for the `pure` version
-	  options.forced      - export even if the native feature is available
-	  options.bind        - bind methods to the target, required for the `pure` version
-	  options.wrap        - wrap constructors to preventing global pollution, required for the `pure` version
-	  options.unsafe      - use the simple assignment of property instead of delete + defineProperty
-	  options.sham        - add a flag to not completely full polyfills
-	  options.enumerable  - export as enumerable property
-	  options.noTargetGet - prevent calling a getter on target
-	  options.name        - the .name of the function if it does not match the key
+	  options.target         - name of the target object
+	  options.global         - target is the global object
+	  options.stat           - export as static methods of target
+	  options.proto          - export as prototype methods of target
+	  options.real           - real prototype method for the `pure` version
+	  options.forced         - export even if the native feature is available
+	  options.bind           - bind methods to the target, required for the `pure` version
+	  options.wrap           - wrap constructors to preventing global pollution, required for the `pure` version
+	  options.unsafe         - use the simple assignment of property instead of delete + defineProperty
+	  options.sham           - add a flag to not completely full polyfills
+	  options.enumerable     - export as enumerable property
+	  options.dontCallGetSet - prevent calling a getter on target
+	  options.name           - the .name of the function if it does not match the key
 	*/
 	var _export = function (options, source) {
 	  var TARGET = options.target;
@@ -766,19 +998,19 @@
 	  var STATIC = options.stat;
 	  var FORCED, target, key, targetProperty, sourceProperty, descriptor;
 	  if (GLOBAL) {
-	    target = global_1;
+	    target = global$1;
 	  } else if (STATIC) {
-	    target = global_1[TARGET] || setGlobal(TARGET, {});
+	    target = global$1[TARGET] || defineGlobalProperty(TARGET, {});
 	  } else {
-	    target = (global_1[TARGET] || {}).prototype;
+	    target = (global$1[TARGET] || {}).prototype;
 	  }
 	  if (target) for (key in source) {
 	    sourceProperty = source[key];
-	    if (options.noTargetGet) {
+	    if (options.dontCallGetSet) {
 	      descriptor = getOwnPropertyDescriptor(target, key);
 	      targetProperty = descriptor && descriptor.value;
 	    } else targetProperty = target[key];
-	    FORCED = isForced_1(GLOBAL ? key : TARGET + (STATIC ? '.' : '#') + key, options.forced);
+	    FORCED = isForced(GLOBAL ? key : TARGET + (STATIC ? '.' : '#') + key, options.forced);
 	    // contained in target
 	    if (!FORCED && targetProperty !== undefined) {
 	      if (typeof sourceProperty == typeof targetProperty) continue;
@@ -788,33 +1020,53 @@
 	    if (options.sham || (targetProperty && targetProperty.sham)) {
 	      createNonEnumerableProperty(sourceProperty, 'sham', true);
 	    }
-	    // extend global
-	    redefine(target, key, sourceProperty, options);
+	    defineBuiltIn(target, key, sourceProperty, options);
 	  }
 	};
+
+	var classof$2 = classofRaw$2;
 
 	// `IsArray` abstract operation
 	// https://tc39.es/ecma262/#sec-isarray
 	// eslint-disable-next-line es/no-array-isarray -- safe
-	var isArray = Array.isArray || function isArray(argument) {
-	  return classofRaw(argument) == 'Array';
+	var isArray$2 = Array.isArray || function isArray(argument) {
+	  return classof$2(argument) == 'Array';
 	};
 
-	var createProperty = function (object, key, value) {
+	var $TypeError = TypeError;
+	var MAX_SAFE_INTEGER = 0x1FFFFFFFFFFFFF; // 2 ** 53 - 1 == 9007199254740991
+
+	var doesNotExceedSafeInteger$1 = function (it) {
+	  if (it > MAX_SAFE_INTEGER) throw $TypeError('Maximum allowed index exceeded');
+	  return it;
+	};
+
+	var toPropertyKey = toPropertyKey$3;
+	var definePropertyModule = objectDefineProperty;
+	var createPropertyDescriptor = createPropertyDescriptor$3;
+
+	var createProperty$1 = function (object, key, value) {
 	  var propertyKey = toPropertyKey(key);
-	  if (propertyKey in object) objectDefineProperty.f(object, propertyKey, createPropertyDescriptor(0, value));
+	  if (propertyKey in object) definePropertyModule.f(object, propertyKey, createPropertyDescriptor(0, value));
 	  else object[propertyKey] = value;
 	};
 
-	var TO_STRING_TAG$1 = wellKnownSymbol('toStringTag');
+	var wellKnownSymbol$4 = wellKnownSymbol$6;
+
+	var TO_STRING_TAG$1 = wellKnownSymbol$4('toStringTag');
 	var test = {};
 
 	test[TO_STRING_TAG$1] = 'z';
 
 	var toStringTagSupport = String(test) === '[object z]';
 
-	var TO_STRING_TAG = wellKnownSymbol('toStringTag');
-	var Object$1 = global_1.Object;
+	var TO_STRING_TAG_SUPPORT = toStringTagSupport;
+	var isCallable$1 = isCallable$c;
+	var classofRaw = classofRaw$2;
+	var wellKnownSymbol$3 = wellKnownSymbol$6;
+
+	var TO_STRING_TAG = wellKnownSymbol$3('toStringTag');
+	var $Object = Object;
 
 	// ES3 wrong here
 	var CORRECT_ARGUMENTS = classofRaw(function () { return arguments; }()) == 'Arguments';
@@ -827,22 +1079,29 @@
 	};
 
 	// getting tag from ES6+ `Object.prototype.toString`
-	var classof = toStringTagSupport ? classofRaw : function (it) {
+	var classof$1 = TO_STRING_TAG_SUPPORT ? classofRaw : function (it) {
 	  var O, tag, result;
 	  return it === undefined ? 'Undefined' : it === null ? 'Null'
 	    // @@toStringTag case
-	    : typeof (tag = tryGet(O = Object$1(it), TO_STRING_TAG)) == 'string' ? tag
+	    : typeof (tag = tryGet(O = $Object(it), TO_STRING_TAG)) == 'string' ? tag
 	    // builtinTag case
 	    : CORRECT_ARGUMENTS ? classofRaw(O)
 	    // ES3 arguments fallback
-	    : (result = classofRaw(O)) == 'Object' && isCallable(O.callee) ? 'Arguments' : result;
+	    : (result = classofRaw(O)) == 'Object' && isCallable$1(O.callee) ? 'Arguments' : result;
 	};
+
+	var uncurryThis = functionUncurryThis;
+	var fails$2 = fails$b;
+	var isCallable = isCallable$c;
+	var classof = classof$1;
+	var getBuiltIn = getBuiltIn$4;
+	var inspectSource = inspectSource$2;
 
 	var noop = function () { /* empty */ };
 	var empty = [];
 	var construct = getBuiltIn('Reflect', 'construct');
 	var constructorRegExp = /^\s*(?:class|function)\b/;
-	var exec = functionUncurryThis(constructorRegExp.exec);
+	var exec = uncurryThis(constructorRegExp.exec);
 	var INCORRECT_TO_STRING = !constructorRegExp.exec(noop);
 
 	var isConstructorModern = function isConstructor(argument) {
@@ -876,7 +1135,7 @@
 
 	// `IsConstructor` abstract operation
 	// https://tc39.es/ecma262/#sec-isconstructor
-	var isConstructor = !construct || fails(function () {
+	var isConstructor$1 = !construct || fails$2(function () {
 	  var called;
 	  return isConstructorModern(isConstructorModern.call)
 	    || !isConstructorModern(Object)
@@ -884,37 +1143,48 @@
 	    || called;
 	}) ? isConstructorLegacy : isConstructorModern;
 
-	var SPECIES$1 = wellKnownSymbol('species');
-	var Array$1 = global_1.Array;
+	var isArray$1 = isArray$2;
+	var isConstructor = isConstructor$1;
+	var isObject$1 = isObject$7;
+	var wellKnownSymbol$2 = wellKnownSymbol$6;
+
+	var SPECIES$1 = wellKnownSymbol$2('species');
+	var $Array = Array;
 
 	// a part of `ArraySpeciesCreate` abstract operation
 	// https://tc39.es/ecma262/#sec-arrayspeciescreate
-	var arraySpeciesConstructor = function (originalArray) {
+	var arraySpeciesConstructor$1 = function (originalArray) {
 	  var C;
-	  if (isArray(originalArray)) {
+	  if (isArray$1(originalArray)) {
 	    C = originalArray.constructor;
 	    // cross-realm fallback
-	    if (isConstructor(C) && (C === Array$1 || isArray(C.prototype))) C = undefined;
-	    else if (isObject(C)) {
+	    if (isConstructor(C) && (C === $Array || isArray$1(C.prototype))) C = undefined;
+	    else if (isObject$1(C)) {
 	      C = C[SPECIES$1];
 	      if (C === null) C = undefined;
 	    }
-	  } return C === undefined ? Array$1 : C;
+	  } return C === undefined ? $Array : C;
 	};
+
+	var arraySpeciesConstructor = arraySpeciesConstructor$1;
 
 	// `ArraySpeciesCreate` abstract operation
 	// https://tc39.es/ecma262/#sec-arrayspeciescreate
-	var arraySpeciesCreate = function (originalArray, length) {
+	var arraySpeciesCreate$1 = function (originalArray, length) {
 	  return new (arraySpeciesConstructor(originalArray))(length === 0 ? 0 : length);
 	};
 
-	var SPECIES = wellKnownSymbol('species');
+	var fails$1 = fails$b;
+	var wellKnownSymbol$1 = wellKnownSymbol$6;
+	var V8_VERSION$1 = engineV8Version;
 
-	var arrayMethodHasSpeciesSupport = function (METHOD_NAME) {
+	var SPECIES = wellKnownSymbol$1('species');
+
+	var arrayMethodHasSpeciesSupport$1 = function (METHOD_NAME) {
 	  // We can't use this feature detection in V8 since it causes
 	  // deoptimization and serious performance degradation
 	  // https://github.com/zloirock/core-js/issues/677
-	  return engineV8Version >= 51 || !fails(function () {
+	  return V8_VERSION$1 >= 51 || !fails$1(function () {
 	    var array = [];
 	    var constructor = array.constructor = {};
 	    constructor[SPECIES] = function () {
@@ -924,15 +1194,25 @@
 	  });
 	};
 
+	var $ = _export;
+	var fails = fails$b;
+	var isArray = isArray$2;
+	var isObject = isObject$7;
+	var toObject = toObject$2;
+	var lengthOfArrayLike = lengthOfArrayLike$2;
+	var doesNotExceedSafeInteger = doesNotExceedSafeInteger$1;
+	var createProperty = createProperty$1;
+	var arraySpeciesCreate = arraySpeciesCreate$1;
+	var arrayMethodHasSpeciesSupport = arrayMethodHasSpeciesSupport$1;
+	var wellKnownSymbol = wellKnownSymbol$6;
+	var V8_VERSION = engineV8Version;
+
 	var IS_CONCAT_SPREADABLE = wellKnownSymbol('isConcatSpreadable');
-	var MAX_SAFE_INTEGER = 0x1FFFFFFFFFFFFF;
-	var MAXIMUM_ALLOWED_INDEX_EXCEEDED = 'Maximum allowed index exceeded';
-	var TypeError = global_1.TypeError;
 
 	// We can't use this feature detection in V8 since it causes
 	// deoptimization and serious performance degradation
 	// https://github.com/zloirock/core-js/issues/679
-	var IS_CONCAT_SPREADABLE_SUPPORT = engineV8Version >= 51 || !fails(function () {
+	var IS_CONCAT_SPREADABLE_SUPPORT = V8_VERSION >= 51 || !fails(function () {
 	  var array = [];
 	  array[IS_CONCAT_SPREADABLE] = false;
 	  return array.concat()[0] !== array;
@@ -951,7 +1231,7 @@
 	// `Array.prototype.concat` method
 	// https://tc39.es/ecma262/#sec-array.prototype.concat
 	// with adding support of @@isConcatSpreadable and @@species
-	_export({ target: 'Array', proto: true, forced: FORCED }, {
+	$({ target: 'Array', proto: true, arity: 1, forced: FORCED }, {
 	  // eslint-disable-next-line no-unused-vars -- required for `.length`
 	  concat: function concat(arg) {
 	    var O = toObject(this);
@@ -962,10 +1242,10 @@
 	      E = i === -1 ? O : arguments[i];
 	      if (isConcatSpreadable(E)) {
 	        len = lengthOfArrayLike(E);
-	        if (n + len > MAX_SAFE_INTEGER) throw TypeError(MAXIMUM_ALLOWED_INDEX_EXCEEDED);
+	        doesNotExceedSafeInteger(n + len);
 	        for (k = 0; k < len; k++, n++) if (k in E) createProperty(A, n, E[k]);
 	      } else {
-	        if (n >= MAX_SAFE_INTEGER) throw TypeError(MAXIMUM_ALLOWED_INDEX_EXCEEDED);
+	        doesNotExceedSafeInteger(n + 1);
 	        createProperty(A, n++, E);
 	      }
 	    }
@@ -996,7 +1276,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Resultate ".concat(pageFrom, " tot ").concat(pageTo, " van ").concat(totalRows, " rye (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "Resultate ".concat(pageFrom, " tot ").concat(pageTo, " van ").concat(totalRows, " rye");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -1031,9 +1310,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Herlaai';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Wissel';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -1102,7 +1378,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "\u0627\u0644\u0638\u0627\u0647\u0631 ".concat(pageFrom, " \u0625\u0644\u0649 ").concat(pageTo, " \u0645\u0646 ").concat(totalRows, " \u0633\u062C\u0644 ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "\u0627\u0644\u0638\u0627\u0647\u0631 ".concat(pageFrom, " \u0625\u0644\u0649 ").concat(pageTo, " \u0645\u0646 ").concat(totalRows, " \u0633\u062C\u0644");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -1138,9 +1413,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'تحديث';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'تغيير';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -1209,7 +1481,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "\u041F\u043E\u043A\u0430\u0437\u0430\u043D\u0438 \u0440\u0435\u0434\u043E\u0432\u0435 \u043E\u0442 ".concat(pageFrom, " \u0434\u043E ").concat(pageTo, " \u043E\u0442 ").concat(totalRows, " (\u0444\u0438\u043B\u0442\u0440\u0438\u0440\u0430\u043D\u0438 \u043E\u0442 \u043E\u0431\u0449\u043E ").concat(totalNotFiltered, ")");
 	    }
-
 	    return "\u041F\u043E\u043A\u0430\u0437\u0430\u043D\u0438 \u0440\u0435\u0434\u043E\u0432\u0435 \u043E\u0442 ".concat(pageFrom, " \u0434\u043E ").concat(pageTo, " \u043E\u0442 \u043E\u0431\u0449\u043E ").concat(totalRows);
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -1244,9 +1515,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Обновяване';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Превключване';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Показване на изглед карта';
@@ -1316,7 +1584,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Mostrant de ".concat(pageFrom, " fins ").concat(pageTo, " - total ").concat(totalRows, " resultats (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "Mostrant de ".concat(pageFrom, " fins ").concat(pageTo, " - total ").concat(totalRows, " resultats");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -1351,9 +1618,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Refresca';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Alterna formatació';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -1423,7 +1687,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Zobrazena ".concat(pageFrom, ". - ").concat(pageTo, " . polo\u017Eka z celkov\xFDch ").concat(totalRows, " (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "Zobrazena ".concat(pageFrom, ". - ").concat(pageTo, " . polo\u017Eka z celkov\xFDch ").concat(totalRows);
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -1458,9 +1721,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Aktualizovat';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Přepni';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Zobrazit karty';
@@ -1529,7 +1789,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Viser ".concat(pageFrom, " til ").concat(pageTo, " af ").concat(totalRows, " r\xE6kke").concat(totalRows > 1 ? 'r' : '', " (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "Viser ".concat(pageFrom, " til ").concat(pageTo, " af ").concat(totalRows, " r\xE6kke").concat(totalRows > 1 ? 'r' : '');
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -1564,9 +1823,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Opdater';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Skift';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -1635,7 +1891,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Zeige Zeile ".concat(pageFrom, " bis ").concat(pageTo, " von ").concat(totalRows, " Zeile").concat(totalRows > 1 ? 'n' : '', " (Gefiltert von ").concat(totalNotFiltered, " Zeile").concat(totalNotFiltered > 1 ? 'n' : '', ")");
 	    }
-
 	    return "Zeige Zeile ".concat(pageFrom, " bis ").concat(pageTo, " von ").concat(totalRows, " Zeile").concat(totalRows > 1 ? 'n' : '', ".");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -1670,9 +1925,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Neu laden';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Umschalten';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Normale Ansicht';
@@ -1780,7 +2032,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "\u0395\u03BC\u03C6\u03B1\u03BD\u03AF\u03B6\u03BF\u03BD\u03C4\u03B1\u03B9 \u03B1\u03C0\u03CC \u03C4\u03B7\u03BD ".concat(pageFrom, " \u03C9\u03C2 \u03C4\u03B7\u03BD ").concat(pageTo, " \u03B1\u03C0\u03CC \u03C3\u03CD\u03BD\u03BF\u03BB\u03BF ").concat(totalRows, " \u03C3\u03B5\u03B9\u03C1\u03CE\u03BD (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "\u0395\u03BC\u03C6\u03B1\u03BD\u03AF\u03B6\u03BF\u03BD\u03C4\u03B1\u03B9 \u03B1\u03C0\u03CC \u03C4\u03B7\u03BD ".concat(pageFrom, " \u03C9\u03C2 \u03C4\u03B7\u03BD ").concat(pageTo, " \u03B1\u03C0\u03CC \u03C3\u03CD\u03BD\u03BF\u03BB\u03BF ").concat(totalRows, " \u03C3\u03B5\u03B9\u03C1\u03CE\u03BD");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -1815,9 +2066,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Refresh';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Toggle';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -1886,7 +2134,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Showing ".concat(pageFrom, " to ").concat(pageTo, " of ").concat(totalRows, " rows (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "Showing ".concat(pageFrom, " to ").concat(pageTo, " of ").concat(totalRows, " rows");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -1921,9 +2168,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Refresh';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Toggle';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -1993,7 +2237,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Mostrando desde ".concat(pageFrom, " a ").concat(pageTo, " de ").concat(totalRows, " filas (filtrado de ").concat(totalNotFiltered, " columnas totales)");
 	    }
-
 	    return "Mostrando desde ".concat(pageFrom, " a ").concat(pageTo, " de ").concat(totalRows, " filas");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -2028,9 +2271,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Recargar';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Cambiar';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Mostrar vista de carta';
@@ -2100,7 +2340,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Mostrando ".concat(pageFrom, " a ").concat(pageTo, " de ").concat(totalRows, " filas (filtrado de ").concat(totalNotFiltered, " filas totales)");
 	    }
-
 	    return "Mostrando ".concat(pageFrom, " a ").concat(pageTo, " de ").concat(totalRows, " filas");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -2135,9 +2374,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Refrescar';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Cambiar';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Mostrar vista de carta';
@@ -2186,40 +2422,40 @@
 
 	/**
 	 * Bootstrap Table Spanish (Costa Rica) translation
-	 * Author: Dennis Hernández (http://djhvscf.github.io/Blog/)
+	 * Author: Dennis Hernández
+	 * Review: Jei (@jeijei4) (20/Oct/2022)
 	 */
 
 	$__default["default"].fn.bootstrapTable.locales['es-CR'] = {
 	  formatCopyRows: function formatCopyRows() {
-	    return 'Copy Rows';
+	    return 'Copiar filas';
 	  },
 	  formatPrint: function formatPrint() {
-	    return 'Print';
+	    return 'Imprimir';
 	  },
 	  formatLoadingMessage: function formatLoadingMessage() {
 	    return 'Cargando, por favor espere';
 	  },
 	  formatRecordsPerPage: function formatRecordsPerPage(pageNumber) {
-	    return "".concat(pageNumber, " registros por p\xE1gina");
+	    return "".concat(pageNumber, " filas por p\xE1gina");
 	  },
 	  formatShowingRows: function formatShowingRows(pageFrom, pageTo, totalRows, totalNotFiltered) {
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
-	      return "Mostrando de ".concat(pageFrom, " a ").concat(pageTo, " registros de ").concat(totalRows, " registros en total (filtered from ").concat(totalNotFiltered, " total rows)");
+	      return "Mostrando ".concat(pageFrom, " a ").concat(pageTo, " de ").concat(totalRows, " filas (filtrado de un total de ").concat(totalNotFiltered, " filas)");
 	    }
-
-	    return "Mostrando de ".concat(pageFrom, " a ").concat(pageTo, " registros de ").concat(totalRows, " registros en total");
+	    return "Mostrando ".concat(pageFrom, " a ").concat(pageTo, " de ").concat(totalRows, " filas");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
-	    return 'previous page';
+	    return 'página anterior';
 	  },
 	  formatSRPaginationPageText: function formatSRPaginationPageText(page) {
-	    return "to page ".concat(page);
+	    return "ir a la p\xE1gina ".concat(page);
 	  },
 	  formatSRPaginationNextText: function formatSRPaginationNextText() {
-	    return 'next page';
+	    return 'página siguiente';
 	  },
 	  formatDetailPagination: function formatDetailPagination(totalRows) {
-	    return "Showing ".concat(totalRows, " rows");
+	    return "Mostrando ".concat(totalRows, " filas");
 	  },
 	  formatClearSearch: function formatClearSearch() {
 	    return 'Limpiar búsqueda';
@@ -2228,58 +2464,55 @@
 	    return 'Buscar';
 	  },
 	  formatNoMatches: function formatNoMatches() {
-	    return 'No se encontraron registros';
+	    return 'No se encontraron resultados';
 	  },
 	  formatPaginationSwitch: function formatPaginationSwitch() {
-	    return 'Hide/Show pagination';
+	    return 'Mostrar/ocultar paginación';
 	  },
 	  formatPaginationSwitchDown: function formatPaginationSwitchDown() {
-	    return 'Show pagination';
+	    return 'Mostrar paginación';
 	  },
 	  formatPaginationSwitchUp: function formatPaginationSwitchUp() {
-	    return 'Hide pagination';
+	    return 'Ocultar paginación';
 	  },
 	  formatRefresh: function formatRefresh() {
-	    return 'Refrescar';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Alternar';
+	    return 'Actualizar';
 	  },
 	  formatToggleOn: function formatToggleOn() {
-	    return 'Show card view';
+	    return 'Mostrar vista en tarjetas';
 	  },
 	  formatToggleOff: function formatToggleOff() {
-	    return 'Hide card view';
+	    return 'Ocultar vista en tarjetas';
 	  },
 	  formatColumns: function formatColumns() {
 	    return 'Columnas';
 	  },
 	  formatColumnsToggleAll: function formatColumnsToggleAll() {
-	    return 'Toggle all';
+	    return 'Alternar todo';
 	  },
 	  formatFullscreen: function formatFullscreen() {
-	    return 'Fullscreen';
+	    return 'Pantalla completa';
 	  },
 	  formatAllRows: function formatAllRows() {
-	    return 'Todo';
+	    return 'Todas las filas';
 	  },
 	  formatAutoRefresh: function formatAutoRefresh() {
-	    return 'Auto Refresh';
+	    return 'Actualización automática';
 	  },
 	  formatExport: function formatExport() {
-	    return 'Export data';
+	    return 'Exportar';
 	  },
 	  formatJumpTo: function formatJumpTo() {
-	    return 'GO';
+	    return 'Ver';
 	  },
 	  formatAdvancedSearch: function formatAdvancedSearch() {
-	    return 'Advanced search';
+	    return 'Búsqueda avanzada';
 	  },
 	  formatAdvancedCloseButton: function formatAdvancedCloseButton() {
-	    return 'Close';
+	    return 'Cerrar';
 	  },
 	  formatFilterControlSwitch: function formatFilterControlSwitch() {
-	    return 'Ocultar/Mostrar controles';
+	    return 'Mostrar/ocultar controles';
 	  },
 	  formatFilterControlSwitchHide: function formatFilterControlSwitchHide() {
 	    return 'Ocultar controles';
@@ -2303,7 +2536,7 @@
 	    return 'Imprimir';
 	  },
 	  formatLoadingMessage: function formatLoadingMessage() {
-	    return 'Por favor espere';
+	    return 'Cargando, por favor espere';
 	  },
 	  formatRecordsPerPage: function formatRecordsPerPage(pageNumber) {
 	    return "".concat(pageNumber, " resultados por p\xE1gina");
@@ -2312,7 +2545,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Mostrando desde ".concat(pageFrom, " hasta ").concat(pageTo, " - En total ").concat(totalRows, " resultados (filtrado de ").concat(totalNotFiltered, " filas totales)");
 	    }
-
 	    return "Mostrando desde ".concat(pageFrom, " hasta ").concat(pageTo, " - En total ").concat(totalRows, " resultados");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -2347,9 +2579,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Recargar';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Ocultar/Mostrar';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Mostrar vista de carta';
@@ -2421,7 +2650,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Mostrando ".concat(pageFrom, " a ").concat(pageTo, " de ").concat(totalRows, " filas (filtrado de ").concat(totalNotFiltered, " filas totales)");
 	    }
-
 	    return "Mostrando ".concat(pageFrom, " a ").concat(pageTo, " de ").concat(totalRows, " filas");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -2456,9 +2684,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Actualizar';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Cambiar vista';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Mostrar vista';
@@ -2507,7 +2732,7 @@
 
 	/**
 	 * Bootstrap Table Spanish (Nicaragua) translation
-	 * Author: Dennis Hernández (http://djhvscf.github.io/Blog/)
+	 * Author: Dennis Hernández
 	 */
 
 	$__default["default"].fn.bootstrapTable.locales['es-NI'] = {
@@ -2527,7 +2752,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Mostrando de ".concat(pageFrom, " a ").concat(pageTo, " registros de ").concat(totalRows, " registros en total (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "Mostrando de ".concat(pageFrom, " a ").concat(pageTo, " registros de ").concat(totalRows, " registros en total");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -2562,9 +2786,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Refrescar';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Alternar';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -2633,7 +2854,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "".concat(pageFrom, " - ").concat(pageTo, " de ").concat(totalRows, " registros (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "".concat(pageFrom, " - ").concat(pageTo, " de ").concat(totalRows, " registros.");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -2668,9 +2888,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Actualizar';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Alternar';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -2739,7 +2956,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "N\xE4itan tulemusi ".concat(pageFrom, " kuni ").concat(pageTo, " - kokku ").concat(totalRows, " tulemust (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "N\xE4itan tulemusi ".concat(pageFrom, " kuni ").concat(pageTo, " - kokku ").concat(totalRows, " tulemust");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -2774,9 +2990,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Värskenda';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Lülita';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -2845,7 +3058,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "".concat(totalRows, " erregistroetatik ").concat(pageFrom, "etik ").concat(pageTo, "erakoak erakusten (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "".concat(totalRows, " erregistroetatik ").concat(pageFrom, "etik ").concat(pageTo, "erakoak erakusten.");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -2880,9 +3092,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Eguneratu';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Ezkutatu/Erakutsi';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -2951,7 +3160,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "\u0646\u0645\u0627\u06CC\u0634 ".concat(pageFrom, " \u062A\u0627 ").concat(pageTo, " \u0627\u0632 ").concat(totalRows, " \u0631\u062F\u06CC\u0641 (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "\u0646\u0645\u0627\u06CC\u0634 ".concat(pageFrom, " \u062A\u0627 ").concat(pageTo, " \u0627\u0632 ").concat(totalRows, " \u0631\u062F\u06CC\u0641");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -2986,9 +3194,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'به روز رسانی';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'تغییر نمایش';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -3057,7 +3262,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "N\xE4ytet\xE4\xE4n rivit ".concat(pageFrom, " - ").concat(pageTo, " / ").concat(totalRows, " (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "N\xE4ytet\xE4\xE4n rivit ".concat(pageFrom, " - ").concat(pageTo, " / ").concat(totalRows);
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -3092,9 +3296,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Päivitä';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Valitse';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -3164,7 +3365,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Affiche de ".concat(pageFrom, " \xE0 ").concat(pageTo, " sur ").concat(totalRows, " lignes (filtr\xE9s \xE0 partir de ").concat(totalNotFiltered, " lignes)");
 	    }
-
 	    return "Affiche de ".concat(pageFrom, " \xE0 ").concat(pageTo, " sur ").concat(totalRows, " lignes");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -3199,9 +3399,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Rafraichir';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Basculer';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Afficher vue carte';
@@ -3270,7 +3467,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Affiche de ".concat(pageFrom, " \xE0 ").concat(pageTo, " sur ").concat(totalRows, " lignes (filtr\xE9s \xE0 partir de ").concat(totalNotFiltered, " lignes)");
 	    }
-
 	    return "Affiche de ".concat(pageFrom, " \xE0 ").concat(pageTo, " sur ").concat(totalRows, " lignes");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -3305,9 +3501,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Rafraichir';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Basculer';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Afficher vue carte';
@@ -3356,7 +3549,7 @@
 
 	/**
 	 * Bootstrap Table French (France) translation
-	 * Author: Dennis Hernández (http://djhvscf.github.io/Blog/)
+	 * Author: Dennis Hernández
 	 *         Tidalf (https://github.com/TidalfFR)
 	 *         Nevets82 <Nevets82@gmail.com>
 	 */
@@ -3376,10 +3569,9 @@
 	  },
 	  formatShowingRows: function formatShowingRows(pageFrom, pageTo, totalRows, totalNotFiltered) {
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
-	      return "Affiche de ".concat(pageFrom, " \xE0 ").concat(pageTo, " sur ").concat(totalRows, " lignes (filtr\xE9s \xE0 partir de ").concat(totalNotFiltered, " lignes)");
+	      return "Affichage de ".concat(pageFrom, " \xE0 ").concat(pageTo, " sur ").concat(totalRows, " lignes (filtr\xE9s \xE0 partir de ").concat(totalNotFiltered, " lignes)");
 	    }
-
-	    return "Affiche de ".concat(pageFrom, " \xE0 ").concat(pageTo, " sur ").concat(totalRows, " lignes");
+	    return "Affichage de ".concat(pageFrom, " \xE0 ").concat(pageTo, " sur ").concat(totalRows, " lignes");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
 	    return 'page précédente';
@@ -3391,7 +3583,7 @@
 	    return 'page suivante';
 	  },
 	  formatDetailPagination: function formatDetailPagination(totalRows) {
-	    return "Affiche ".concat(totalRows, " lignes");
+	    return "Affichage de ".concat(totalRows, " lignes");
 	  },
 	  formatClearSearch: function formatClearSearch() {
 	    return 'Effacer la recherche';
@@ -3413,9 +3605,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Actualiser';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Basculer';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Afficher la vue carte';
@@ -3485,7 +3674,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Affiche de ".concat(pageFrom, " \xE0 ").concat(pageTo, " sur ").concat(totalRows, " lignes (filtr\xE9s \xE0 partir de ").concat(totalNotFiltered, " lignes)");
 	    }
-
 	    return "Affiche de ".concat(pageFrom, " \xE0 ").concat(pageTo, " sur ").concat(totalRows, " lignes");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -3520,9 +3708,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Rafraichir';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Basculer';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Afficher vue carte';
@@ -3591,7 +3776,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "\u05DE\u05E6\u05D9\u05D2 ".concat(pageFrom, " \u05E2\u05D3 ").concat(pageTo, " \u05DE-").concat(totalRows, "\u05E9\u05D5\u05E8\u05D5\u05EA").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "\u05DE\u05E6\u05D9\u05D2 ".concat(pageFrom, " \u05E2\u05D3 ").concat(pageTo, " \u05DE-").concat(totalRows, " \u05E9\u05D5\u05E8\u05D5\u05EA");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -3626,9 +3810,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'רענן';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'החלף תצוגה';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -3697,7 +3878,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "".concat(pageFrom, " - ").concat(pageTo, " \u092A\u0915\u094D\u0924\u093F\u092F\u093E ").concat(totalRows, " \u092E\u0947\u0902 \u0938\u0947 ( ").concat(totalNotFiltered, " \u092A\u0915\u094D\u0924\u093F\u092F\u093E)");
 	    }
-
 	    return "".concat(pageFrom, " - ").concat(pageTo, " \u092A\u0915\u094D\u0924\u093F\u092F\u093E ").concat(totalRows, " \u092E\u0947\u0902 \u0938\u0947");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -3732,9 +3912,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'रिफ्रेश';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'टॉगल';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'कार्ड दृश्य दिखाएं';
@@ -3804,7 +3981,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Prikazujem ".concat(pageFrom, ". - ").concat(pageTo, ". od ukupnog broja zapisa ").concat(totalRows, " (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "Prikazujem ".concat(pageFrom, ". - ").concat(pageTo, ". od ukupnog broja zapisa ").concat(totalRows);
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -3839,9 +4015,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Osvježi';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Promijeni prikaz';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -3910,7 +4083,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Megjelen\xEDtve ".concat(pageFrom, " - ").concat(pageTo, " / ").concat(totalRows, " \xF6sszesen (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "Megjelen\xEDtve ".concat(pageFrom, " - ").concat(pageTo, " / ").concat(totalRows, " \xF6sszesen");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -3945,9 +4117,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Frissítés';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Összecsuk/Kinyit';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -4016,7 +4185,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Menampilkan ".concat(pageFrom, " sampai ").concat(pageTo, " dari ").concat(totalRows, " baris (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "Menampilkan ".concat(pageFrom, " sampai ").concat(pageTo, " dari ").concat(totalRows, " baris");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -4051,9 +4219,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Muat ulang';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Beralih';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -4124,7 +4289,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Visualizzazione da ".concat(pageFrom, " a ").concat(pageTo, " di ").concat(totalRows, " elementi (filtrati da ").concat(totalNotFiltered, " elementi totali)");
 	    }
-
 	    return "Visualizzazione da ".concat(pageFrom, " a ").concat(pageTo, " di ").concat(totalRows, " elementi");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -4159,9 +4323,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Aggiorna';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Attiva/Disattiva';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Mostra visuale a scheda';
@@ -4230,7 +4391,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "\u5168".concat(totalRows, "\u4EF6\u304B\u3089\u3001").concat(pageFrom, "\u304B\u3089").concat(pageTo, "\u4EF6\u76EE\u307E\u3067\u8868\u793A\u3057\u3066\u3044\u307E\u3059 (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "\u5168".concat(totalRows, "\u4EF6\u304B\u3089\u3001").concat(pageFrom, "\u304B\u3089").concat(pageTo, "\u4EF6\u76EE\u307E\u3067\u8868\u793A\u3057\u3066\u3044\u307E\u3059");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -4265,9 +4425,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return '更新';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'トグル';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -4336,7 +4493,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "\u10DC\u10D0\u10E9\u10D5\u10D4\u10DC\u10D4\u10D1\u10D8\u10D0 ".concat(pageFrom, "-\u10D3\u10D0\u10DC ").concat(pageTo, "-\u10DB\u10D3\u10D4 \u10E9\u10D0\u10DC\u10D0\u10EC\u10D4\u10E0\u10D8 \u10EF\u10D0\u10DB\u10E3\u10E0\u10D8 ").concat(totalRows, "-\u10D3\u10D0\u10DC (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "\u10DC\u10D0\u10E9\u10D5\u10D4\u10DC\u10D4\u10D1\u10D8\u10D0 ".concat(pageFrom, "-\u10D3\u10D0\u10DC ").concat(pageTo, "-\u10DB\u10D3\u10D4 \u10E9\u10D0\u10DC\u10D0\u10EC\u10D4\u10E0\u10D8 \u10EF\u10D0\u10DB\u10E3\u10E0\u10D8 ").concat(totalRows, "-\u10D3\u10D0\u10DC");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -4371,9 +4527,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'განახლება';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'ჩართვა/გამორთვა';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -4443,7 +4596,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "\uC804\uCCB4 ".concat(totalRows, "\uAC1C \uC911 ").concat(pageFrom, "~").concat(pageTo, "\uBC88\uC9F8 \uB370\uC774\uD130 \uCD9C\uB825, (\uC804\uCCB4 ").concat(totalNotFiltered, " \uD589\uC5D0\uC11C \uD544\uD130\uB428)");
 	    }
-
 	    return "\uC804\uCCB4 ".concat(totalRows, "\uAC1C \uC911 ").concat(pageFrom, "~").concat(pageTo, "\uBC88\uC9F8 \uB370\uC774\uD130 \uCD9C\uB825,");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -4478,9 +4630,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return '새로 고침';
-	  },
-	  formatToggle: function formatToggle() {
-	    return '전환';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return '카드뷰 보기';
@@ -4549,7 +4698,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Weist Zeil ".concat(pageFrom, " bis ").concat(pageTo, " vun ").concat(totalRows, " Zeil").concat(totalRows > 1 ? 'en' : '', " (gefiltert vun insgesamt ").concat(totalNotFiltered, " Zeil").concat(totalRows > 1 ? 'en' : '', ")");
 	    }
-
 	    return "Weist Zeil ".concat(pageFrom, " bis ").concat(pageTo, " vun ").concat(totalRows, " Zeil").concat(totalRows > 1 ? 'en' : '');
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -4584,9 +4732,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Nei lueden';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Ëmschalten';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Kaartenusiicht uweisen';
@@ -4655,7 +4800,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Sedang memaparkan rekod ".concat(pageFrom, " hingga ").concat(pageTo, " daripada jumlah ").concat(totalRows, " rekod (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "Sedang memaparkan rekod ".concat(pageFrom, " hingga ").concat(pageTo, " daripada jumlah ").concat(totalRows, " rekod");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -4690,9 +4834,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Muatsemula';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Tukar';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -4761,7 +4902,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Viser ".concat(pageFrom, " til ").concat(pageTo, " av ").concat(totalRows, " rekker (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "Viser ".concat(pageFrom, " til ").concat(pageTo, " av ").concat(totalRows, " rekker");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -4796,9 +4936,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Oppdater';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Endre';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -4867,7 +5004,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Toon ".concat(pageFrom, " tot ").concat(pageTo, " van ").concat(totalRows, " record").concat(totalRows > 1 ? 's' : '', " (gefilterd van ").concat(totalNotFiltered, " records in totaal)");
 	    }
-
 	    return "Toon ".concat(pageFrom, " tot ").concat(pageTo, " van ").concat(totalRows, " record").concat(totalRows > 1 ? 's' : '');
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -4902,9 +5038,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Vernieuwen';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Omschakelen';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Toon kaartweergave';
@@ -5013,7 +5146,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Toon ".concat(pageFrom, " tot ").concat(pageTo, " van ").concat(totalRows, " record").concat(totalRows > 1 ? 's' : '', " (gefilterd van ").concat(totalNotFiltered, " records in totaal)");
 	    }
-
 	    return "Toon ".concat(pageFrom, " tot ").concat(pageTo, " van ").concat(totalRows, " record").concat(totalRows > 1 ? 's' : '');
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -5048,9 +5180,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Vernieuwen';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Omschakelen';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Toon kaartweergave';
@@ -5159,7 +5288,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Wy\u015Bwietlanie rekord\xF3w od ".concat(pageFrom, " do ").concat(pageTo, " z ").concat(totalRows, " (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "Wy\u015Bwietlanie rekord\xF3w od ".concat(pageFrom, " do ").concat(pageTo, " z ").concat(totalRows);
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -5194,9 +5322,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Odśwież';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Przełącz';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Pokaż układ karty';
@@ -5268,7 +5393,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Exibindo ".concat(pageFrom, " at\xE9 ").concat(pageTo, " de ").concat(totalRows, " linhas (filtradas de um total de ").concat(totalNotFiltered, " linhas)");
 	    }
-
 	    return "Exibindo ".concat(pageFrom, " at\xE9 ").concat(pageTo, " de ").concat(totalRows, " linhas");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -5303,9 +5427,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Recarregar';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Alternar';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -5374,7 +5495,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "A mostrar ".concat(pageFrom, " at&eacute; ").concat(pageTo, " de ").concat(totalRows, " linhas (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "A mostrar ".concat(pageFrom, " at\xE9 ").concat(pageTo, " de ").concat(totalRows, " linhas");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -5409,9 +5529,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Actualizar';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Alternar';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -5480,7 +5597,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Arata de la ".concat(pageFrom, " pana la ").concat(pageTo, " din ").concat(totalRows, " randuri (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "Arata de la ".concat(pageFrom, " pana la ").concat(pageTo, " din ").concat(totalRows, " randuri");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -5515,9 +5631,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Reincarca';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Comuta';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -5586,7 +5699,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "\u0417\u0430\u043F\u0438\u0441\u0438 \u0441 ".concat(pageFrom, " \u043F\u043E ").concat(pageTo, " \u0438\u0437 ").concat(totalRows, " (\u043E\u0442\u0444\u0438\u043B\u044C\u0442\u0440\u043E\u0432\u0430\u043D\u043E, \u0432\u0441\u0435\u0433\u043E \u043D\u0430 \u0441\u0435\u0440\u0432\u0435\u0440\u0435 ").concat(totalNotFiltered, " \u0437\u0430\u043F\u0438\u0441\u0435\u0439)");
 	    }
-
 	    return "\u0417\u0430\u043F\u0438\u0441\u0438 \u0441 ".concat(pageFrom, " \u043F\u043E ").concat(pageTo, " \u0438\u0437 ").concat(totalRows);
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -5621,9 +5733,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Обновить';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Переключить';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Показать записи в виде карточек';
@@ -5692,7 +5801,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Zobrazen\xE1 ".concat(pageFrom, ". - ").concat(pageTo, ". polo\u017Eka z celkov\xFDch ").concat(totalRows, " (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "Zobrazen\xE1 ".concat(pageFrom, ". - ").concat(pageTo, ". polo\u017Eka z celkov\xFDch ").concat(totalRows);
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -5727,9 +5835,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Obnoviť';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Prepni';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Zobraziť kartové zobrazenie';
@@ -5798,7 +5903,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "\u041F\u0440\u0438\u043A\u0430\u0437\u0430\u043D\u043E ".concat(pageFrom, ". - ").concat(pageTo, ". \u043E\u0434 \u0443\u043A\u0443\u043F\u043D\u043E\u0433 \u0431\u0440\u043E\u0458\u0430 \u0440\u0435\u0434\u043E\u0432\u0430 ").concat(totalRows, " (\u0444\u0438\u043B\u0442\u0440\u0438\u0440\u0430\u043D\u043E \u043E\u0434 ").concat(totalNotFiltered, ")");
 	    }
-
 	    return "\u041F\u0440\u0438\u043A\u0430\u0437\u0430\u043D\u043E ".concat(pageFrom, ". - ").concat(pageTo, ". \u043E\u0434 \u0443\u043A\u0443\u043F\u043D\u043E\u0433 \u0431\u0440\u043E\u0458\u0430 \u0440\u0435\u0434\u043E\u0432\u0430 ").concat(totalRows);
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -5833,9 +5937,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Освежи';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Промени приказ';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Прикажи картице';
@@ -5904,7 +6005,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Prikazano ".concat(pageFrom, ". - ").concat(pageTo, ". od ukupnog broja redova ").concat(totalRows, " (filtrirano od ").concat(totalNotFiltered, ")");
 	    }
-
 	    return "Prikazano ".concat(pageFrom, ". - ").concat(pageTo, ". od ukupnog broja redova ").concat(totalRows);
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -5939,9 +6039,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Osveži';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Promeni prikaz';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Prikaži kartice';
@@ -6010,7 +6107,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Visa ".concat(pageFrom, " till ").concat(pageTo, " av ").concat(totalRows, " rader (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "Visa ".concat(pageFrom, " till ").concat(pageTo, " av ").concat(totalRows, " rader");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -6045,9 +6141,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Uppdatera';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Skifta';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -6116,7 +6209,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "\u0E23\u0E32\u0E22\u0E01\u0E32\u0E23\u0E17\u0E35\u0E48 ".concat(pageFrom, " \u0E16\u0E36\u0E07 ").concat(pageTo, " \u0E08\u0E32\u0E01\u0E17\u0E31\u0E49\u0E07\u0E2B\u0E21\u0E14 ").concat(totalRows, " \u0E23\u0E32\u0E22\u0E01\u0E32\u0E23 (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "\u0E23\u0E32\u0E22\u0E01\u0E32\u0E23\u0E17\u0E35\u0E48 ".concat(pageFrom, " \u0E16\u0E36\u0E07 ").concat(pageTo, " \u0E08\u0E32\u0E01\u0E17\u0E31\u0E49\u0E07\u0E2B\u0E21\u0E14 ").concat(totalRows, " \u0E23\u0E32\u0E22\u0E01\u0E32\u0E23");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -6151,9 +6243,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'รีเฟรส';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'สลับมุมมอง';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -6223,7 +6312,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "".concat(totalRows, " kay\u0131ttan ").concat(pageFrom, "-").concat(pageTo, " aras\u0131 g\xF6steriliyor (filtered from ").concat(totalNotFiltered, " total rows).");
 	    }
-
 	    return "".concat(totalRows, " kay\u0131ttan ").concat(pageFrom, "-").concat(pageTo, " aras\u0131 g\xF6steriliyor.");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -6258,9 +6346,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Yenile';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Değiştir';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -6314,38 +6399,37 @@
 
 	$__default["default"].fn.bootstrapTable.locales['uk-UA'] = $__default["default"].fn.bootstrapTable.locales['uk'] = {
 	  formatCopyRows: function formatCopyRows() {
-	    return 'Copy Rows';
+	    return 'Скопіювати рядки';
 	  },
 	  formatPrint: function formatPrint() {
-	    return 'Print';
+	    return 'Друк';
 	  },
 	  formatLoadingMessage: function formatLoadingMessage() {
 	    return 'Завантаження, будь ласка, зачекайте';
 	  },
 	  formatRecordsPerPage: function formatRecordsPerPage(pageNumber) {
-	    return "".concat(pageNumber, " \u0437\u0430\u043F\u0438\u0441\u0456\u0432 \u043D\u0430 \u0441\u0442\u043E\u0440\u0456\u043D\u043A\u0443");
+	    return "".concat(pageNumber, " \u0440\u044F\u0434\u043A\u0456\u0432 \u043D\u0430 \u0441\u0442\u043E\u0440\u0456\u043D\u043A\u0443");
 	  },
 	  formatShowingRows: function formatShowingRows(pageFrom, pageTo, totalRows, totalNotFiltered) {
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
-	      return "\u041F\u043E\u043A\u0430\u0437\u0430\u043D\u043E \u0437 ".concat(pageFrom, " \u043F\u043E ").concat(pageTo, ". \u0412\u0441\u044C\u043E\u0433\u043E: ").concat(totalRows, " (filtered from ").concat(totalNotFiltered, " total rows)");
+	      return "\u0412\u0456\u0434\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u043E \u0440\u044F\u0434\u043A\u0438 \u0437 ".concat(pageFrom, " \u043F\u043E ").concat(pageTo, " \u0437 ").concat(totalRows, " \u0437\u0430\u0433\u0430\u043B\u043E\u043C (\u0432\u0456\u0434\u0444\u0456\u043B\u044C\u0442\u0440\u043E\u0432\u0430\u043D\u043E \u0437 ").concat(totalNotFiltered, " \u0440\u044F\u0434\u043A\u0456\u0432)");
 	    }
-
-	    return "\u041F\u043E\u043A\u0430\u0437\u0430\u043D\u043E \u0437 ".concat(pageFrom, " \u043F\u043E ").concat(pageTo, ". \u0412\u0441\u044C\u043E\u0433\u043E: ").concat(totalRows);
+	    return "\u0412\u0456\u0434\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u043E \u0440\u044F\u0434\u043A\u0438 \u0437 ".concat(pageFrom, " \u043F\u043E ").concat(pageTo, " \u0437 ").concat(totalRows, " \u0437\u0430\u0433\u0430\u043B\u043E\u043C");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
-	    return 'previous page';
+	    return 'попередня сторінка';
 	  },
 	  formatSRPaginationPageText: function formatSRPaginationPageText(page) {
-	    return "to page ".concat(page);
+	    return "\u0434\u043E \u0441\u0442\u043E\u0440\u0456\u043D\u043A\u0438 ".concat(page);
 	  },
 	  formatSRPaginationNextText: function formatSRPaginationNextText() {
-	    return 'next page';
+	    return 'наступна сторінка';
 	  },
 	  formatDetailPagination: function formatDetailPagination(totalRows) {
-	    return "Showing ".concat(totalRows, " rows");
+	    return "\u0412\u0456\u0434\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u043E ".concat(totalRows, " \u0440\u044F\u0434\u043A\u0456\u0432");
 	  },
 	  formatClearSearch: function formatClearSearch() {
-	    return 'Очистити фільтри';
+	    return 'Скинути фільтри';
 	  },
 	  formatSearch: function formatSearch() {
 	    return 'Пошук';
@@ -6354,61 +6438,58 @@
 	    return 'Не знайдено жодного запису';
 	  },
 	  formatPaginationSwitch: function formatPaginationSwitch() {
-	    return 'Hide/Show pagination';
+	    return 'Сховати/Відобразити пагінацію';
 	  },
 	  formatPaginationSwitchDown: function formatPaginationSwitchDown() {
-	    return 'Show pagination';
+	    return 'Відобразити пагінацію';
 	  },
 	  formatPaginationSwitchUp: function formatPaginationSwitchUp() {
-	    return 'Hide pagination';
+	    return 'Сховати пагінацію';
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Оновити';
 	  },
-	  formatToggle: function formatToggle() {
-	    return 'Змінити';
-	  },
 	  formatToggleOn: function formatToggleOn() {
-	    return 'Show card view';
+	    return 'Відобразити у форматі карток';
 	  },
 	  formatToggleOff: function formatToggleOff() {
-	    return 'Hide card view';
+	    return 'Вимкнути формат карток';
 	  },
 	  formatColumns: function formatColumns() {
 	    return 'Стовпці';
 	  },
 	  formatColumnsToggleAll: function formatColumnsToggleAll() {
-	    return 'Toggle all';
+	    return 'Переключити усі';
 	  },
 	  formatFullscreen: function formatFullscreen() {
-	    return 'Fullscreen';
+	    return 'Повноекранний режим';
 	  },
 	  formatAllRows: function formatAllRows() {
-	    return 'All';
+	    return 'Усі';
 	  },
 	  formatAutoRefresh: function formatAutoRefresh() {
-	    return 'Auto Refresh';
+	    return 'Автооновлення';
 	  },
 	  formatExport: function formatExport() {
-	    return 'Export data';
+	    return 'Експортувати дані';
 	  },
 	  formatJumpTo: function formatJumpTo() {
-	    return 'GO';
+	    return 'Швидкий перехід до';
 	  },
 	  formatAdvancedSearch: function formatAdvancedSearch() {
-	    return 'Advanced search';
+	    return 'Розширений пошук';
 	  },
 	  formatAdvancedCloseButton: function formatAdvancedCloseButton() {
-	    return 'Close';
+	    return 'Закрити';
 	  },
 	  formatFilterControlSwitch: function formatFilterControlSwitch() {
-	    return 'Hide/Show controls';
+	    return 'Сховати/Відобразити елементи керування';
 	  },
 	  formatFilterControlSwitchHide: function formatFilterControlSwitchHide() {
-	    return 'Hide controls';
+	    return 'Сховати елементи керування';
 	  },
 	  formatFilterControlSwitchShow: function formatFilterControlSwitchShow() {
-	    return 'Show controls';
+	    return 'Відобразити елементи керування';
 	  }
 	};
 	$__default["default"].extend($__default["default"].fn.bootstrapTable.defaults, $__default["default"].fn.bootstrapTable.locales['uk-UA']);
@@ -6435,7 +6516,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "\u062F\u06CC\u06A9\u06BE\u06CC\u06BA ".concat(pageFrom, " \u0633\u06D2 ").concat(pageTo, " \u06A9\u06D2 ").concat(totalRows, "\u0631\u06CC\u06A9\u0627\u0631\u0688\u0632 (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "\u062F\u06CC\u06A9\u06BE\u06CC\u06BA ".concat(pageFrom, " \u0633\u06D2 ").concat(pageTo, " \u06A9\u06D2 ").concat(totalRows, "\u0631\u06CC\u06A9\u0627\u0631\u0688\u0632");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -6470,9 +6550,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'تازہ کریں';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'تبدیل کریں';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -6541,7 +6618,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Ko'rsatypati ".concat(pageFrom, " dan ").concat(pageTo, " gacha ").concat(totalRows, " qatorlarni (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "Ko'rsatypati ".concat(pageFrom, " dan ").concat(pageTo, " gacha ").concat(totalRows, " qatorlarni");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -6576,9 +6652,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Yangilash';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Ko\'rinish';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -6647,7 +6720,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "Hi\u1EC3n th\u1ECB t\u1EEB trang ".concat(pageFrom, " \u0111\u1EBFn ").concat(pageTo, " c\u1EE7a ").concat(totalRows, " b\u1EA3ng ghi (filtered from ").concat(totalNotFiltered, " total rows)");
 	    }
-
 	    return "Hi\u1EC3n th\u1ECB t\u1EEB trang ".concat(pageFrom, " \u0111\u1EBFn ").concat(pageTo, " c\u1EE7a ").concat(totalRows, " b\u1EA3ng ghi");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -6682,9 +6754,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Refresh';
-	  },
-	  formatToggle: function formatToggle() {
-	    return 'Toggle';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return 'Show card view';
@@ -6753,7 +6822,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "\u663E\u793A\u7B2C ".concat(pageFrom, " \u5230\u7B2C ").concat(pageTo, " \u6761\u8BB0\u5F55\uFF0C\u603B\u5171 ").concat(totalRows, " \u6761\u8BB0\u5F55\uFF08\u4ECE ").concat(totalNotFiltered, " \u603B\u8BB0\u5F55\u4E2D\u8FC7\u6EE4\uFF09");
 	    }
-
 	    return "\u663E\u793A\u7B2C ".concat(pageFrom, " \u5230\u7B2C ").concat(pageTo, " \u6761\u8BB0\u5F55\uFF0C\u603B\u5171 ").concat(totalRows, " \u6761\u8BB0\u5F55");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -6788,9 +6856,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return '刷新';
-	  },
-	  formatToggle: function formatToggle() {
-	    return '切换';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return '显示卡片视图';
@@ -6859,7 +6924,6 @@
 	    if (totalNotFiltered !== undefined && totalNotFiltered > 0 && totalNotFiltered > totalRows) {
 	      return "\u986F\u793A\u7B2C ".concat(pageFrom, " \u5230\u7B2C ").concat(pageTo, " \u9805\u8A18\u9304\uFF0C\u7E3D\u5171 ").concat(totalRows, " \u9805\u8A18\u9304\uFF08\u5F9E ").concat(totalNotFiltered, " \u7E3D\u8A18\u9304\u4E2D\u904E\u6FFE\uFF09");
 	    }
-
 	    return "\u986F\u793A\u7B2C ".concat(pageFrom, " \u5230\u7B2C ").concat(pageTo, " \u9805\u8A18\u9304\uFF0C\u7E3D\u5171 ").concat(totalRows, " \u9805\u8A18\u9304");
 	  },
 	  formatSRPaginationPreText: function formatSRPaginationPreText() {
@@ -6894,9 +6958,6 @@
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return '重新整理';
-	  },
-	  formatToggle: function formatToggle() {
-	    return '切換';
 	  },
 	  formatToggleOn: function formatToggleOn() {
 	    return '顯示卡片視圖';

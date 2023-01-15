@@ -299,6 +299,36 @@ $(document).ready(function(e) {
 		type: 'line',
 		data: $dashChartLinesData,
 	});
+  const ctx = document.getElementById('myChart');
+  const data = {
+    labels: [
+      'Red',
+      'Green',
+      'Yellow',
+      'Grey',
+      'Blue'
+    ],
+    datasets: [{
+      label: '极地图实例',
+      data: [11, 16, 7, 3, 14],
+      backgroundColor: [
+        'rgb(255, 99, 132)',
+        'rgb(75, 192, 192)',
+        'rgb(255, 205, 86)',
+        'rgb(201, 203, 207)',
+        'rgb(54, 162, 235)'
+      ]
+    }]
+  };
+  const config = {
+    type: 'polarArea',
+    data: data,
+    options: {
+      responsive: true, // 设置图表为响应式，根据屏幕窗口变化而变化
+      maintainAspectRatio: false,// 保持图表原有比例
+    }
+  };
+  const myChart = new Chart(ctx, config);
 });
 </script>
 </body>

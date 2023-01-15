@@ -20,5 +20,10 @@ public class AdminHome {
         model.addAttribute("page_tab","adminHome");
         return "/admin/index";
     }
+    @AdminLoginCheck
+    @RequestMapping(value = "/admin/hostlist")
+    public String hostlist(){
+        return "/admin/hostlist";
+    }
 
 }

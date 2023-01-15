@@ -3,6 +3,8 @@
  * https://github.com/wenzhixin/bootstrap-table/
  * theme: https://github.com/jgthms/bulma/
  */
+/* stylelint-disable annotation-no-unknown, max-line-length */
+/* stylelint-enable annotation-no-unknown, max-line-length */
 .bootstrap-table .fixed-table-toolbar::after {
   content: "";
   display: block;
@@ -49,7 +51,7 @@
   padding: 3px 20px;
   clear: both;
   font-weight: normal;
-  line-height: 1.428571429;
+  line-height: 1.4286;
 }
 
 .bootstrap-table .fixed-table-toolbar .columns-left {
@@ -108,6 +110,11 @@
   background-position: right;
   background-repeat: no-repeat;
   padding-right: 30px !important;
+}
+
+.bootstrap-table .fixed-table-container .table thead th .sortable.sortable-center {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
 }
 
 .bootstrap-table .fixed-table-container .table thead th .both {
@@ -238,7 +245,7 @@
   content: "";
   animation-duration: 1.5s;
   animation-iteration-count: infinite;
-  animation-name: LOADING;
+  animation-name: loading;
   background: rgba(0, 0, 0, 0.87);
   border-radius: 50%;
   display: block;
@@ -310,11 +317,11 @@
 }
 
 .bootstrap-table .fixed-table-pagination > .pagination ul.pagination li.page-intermediate a::before {
-  content: '\2B05';
+  content: "\2B05";
 }
 
 .bootstrap-table .fixed-table-pagination > .pagination ul.pagination li.page-intermediate a::after {
-  content: '\27A1';
+  content: "\27A1";
 }
 
 .bootstrap-table .fixed-table-pagination > .pagination ul.pagination li.disabled a {
@@ -334,7 +341,7 @@
 }
 
 .bootstrap-table.bootstrap4 .pagination-lg .page-link, .bootstrap-table.bootstrap5 .pagination-lg .page-link {
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
 }
 
 .bootstrap-table.bootstrap5 .float-left {
@@ -360,14 +367,14 @@ div.fixed-table-scroll-outer {
   overflow: hidden;
 }
 
-@keyframes LOADING {
+@keyframes loading {
   0% {
     opacity: 0;
   }
   50% {
     opacity: 1;
   }
-  to {
+  100% {
     opacity: 0;
   }
 }
@@ -410,13 +417,13 @@ div.fixed-table-scroll-outer {
   margin-bottom: 0;
 }
 
-.bootstrap-table .fixed-table-pagination .dropup .fa-angle-down:before {
+.bootstrap-table .fixed-table-pagination .dropup .fa-angle-down::before {
   content: "\f106";
 }
 
 .bootstrap-table .fixed-table-pagination .page-item {
   padding: 6px 12px;
-  line-height: 1.428571429;
+  line-height: 1.4286;
 }
 
 .bootstrap-table .dropdown-pane {
