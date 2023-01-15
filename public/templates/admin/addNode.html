@@ -51,7 +51,7 @@
                                                 <small class="form-text">宝塔设置->APi接口->接口密钥</small>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="nodeKey" class="form-label">服务器操作系统</label>
+                                                <label for="nodeOS" class="form-label">服务器操作系统</label>
                                                 <select class="form-select" id="nodeOS" name="nodeOS" aria-label="操作系统">
                                                     <option value="1">Linux</option>
                                                     <option value="2">Windows</option>
@@ -59,7 +59,7 @@
                                                 <small class="form-text"><code>注意只有Windows系统才支持IIS服务！</code></small>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="nodeKey" class="form-label">安全访问(HTTPS)</label>
+                                                <label for="nodeSSL" class="form-label">安全访问(HTTPS)</label>
                                                 <div class="form-check form-switch">
                                                     <input class="form-check-input" type="checkbox" role="switch" id="nodeSSL">
                                                 </div>
@@ -91,19 +91,16 @@
     <script type="text/javascript" src="/js/jquery.cookie.min.js"></script>
     <script type="text/javascript" src="/js/main.min.js"></script>
     <!--引入loading插件js-->
-<script type="text/javascript" src="js/lyear-loading.js"></script>
+    <script type="text/javascript" src="/js/lyear-loading.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-    // 按钮中的loading
     $('#okButton').click(function(){
-        $(this).attr('disable', 'true');
-        var l = $(this).lyearloading({
-            opacity: 0.2,
-            spinnerSize: 'nm'
+        var l = $('#addNode').lyearloading({
+            opacity: 0.125,
+            spinnerSize: 'lg'
         });
         setTimeout(function() {
-            $(this).prop('disable', 'false');
-            l.destroy(); // 可以使用hide，页面中如果有多个loading，最好用destroy，避免后面的loading设置不生效
+            l.destroy();
         }, 1e3)
     });
 });

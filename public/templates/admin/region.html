@@ -45,42 +45,50 @@
                                 <br>
                                 <div class="row">
                                     <div class="list-group">
-                                        <div>
-                                            <button class="shadow-lg callout callout-info mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                        <div  th:each="regionList:${region}">
+                                            <button class="shadow-lg callout callout-info mb-3" type="button" data-bs-toggle="collapse" th:attr="data-bs-target='#'+${regionList.code}+'Collapse'" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                                                 <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="...">
-                                                <span class="flag-icon flag-icon-cn"></span>
-                                                中国
+                                                <span class="flag-icon" th:classappend="'flag-icon-'+${regionList.code}"></span>
+                                                <span th:text="${regionList.parentClass}"></span>
                                             </button>
-                                            <div class="collapse" id="collapseExample">
+                                            <div class="collapse" id="collapseExample" th:id="${regionList.code}+'Collapse'">
                                                 <div class="shadow card card-body">
-                                                  《冰魄寒光剑》讲述武当派北支掌门之子桂华生在西域的传奇经历和其与华玉公主的爱情故事。
+                                                    
+                                                        <table class="table table-bordered table-hover table-striped">
+                                                          <thead>
+                                                            <tr>
+                                                              <th>ID</th>
+                                                              <th>地区</th>
+                                                              <th>节点数量</th>
+                                                              <th>状态</th>
+                                                              <th>硬盘使用率(所有)</th>
+                                                              <th>操作</th>
+                                                            </tr>
+                                                          </thead>
+                                                          <tbody  th:each="lowregion:${regionList.regions}">
+                                                            <tr>
+                                                              <td scope="row" th:text="${lowregion.id}">1</td>
+                                                              <td th:text="${lowregion.region}">武汉</td>
+                                                              <td th:text="${lowregion.nodenum}">10</td>
+                                                              <td><span class="badge rounded-pill bg-success">正常</span></td>
+                                                              <td>
+                                                                <div class="progress">
+                                                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                                                                </div>
+                                                              </td>
+                                      
+                                                              <td>
+                                                                <div class="btn-group">
+                                                                    <a href="#!" title="删除" data-toggle="tooltip"><span class="badge bg-danger">删除</span></a>
+                                                                  </div>
+                                                              </td>
+                                                            </tr>
+                                                          </tbody>
+                                                        </table>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div>
-                                            <button class="shadow-lg callout callout-info mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2">
-                                                <input class="form-check-input" type="checkbox" id="checkboxNoLabel2" value="" aria-label="...">
-                                                <span class="flag-icon flag-icon-jp"></span>
-                                                日本
-                                            </button>
-                                            <div class="collapse" id="collapseExample2">
-                                                <div class="shadow card card-body">
-                                                  《冰魄寒光剑》讲述武当派北支掌门之子桂华生在西域的传奇经历和其与华玉公主的爱情故事。
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <button class="shadow-lg callout callout-info mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample3">
-                                                <input class="form-check-input" type="checkbox" id="checkboxNoLabel3" value="" aria-label="...">
-                                                <span class="flag-icon flag-icon-us"></span>
-                                                美国
-                                            </button>
-                                            <div class="collapse" id="collapseExample3">
-                                                <div class="shadow card card-body">
-                                                  《冰魄寒光剑》讲述武当派北支掌门之子桂华生在西域的传奇经历和其与华玉公主的爱情故事。
-                                                </div>
-                                            </div>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>

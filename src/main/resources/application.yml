@@ -58,12 +58,16 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       connection-timeout: 30000     # 等待连接池分配链接的最大时长（毫秒），超过这个时长还没有可用的连接则发生 SQLException，默认：30 秒
-      maximum-pool-size: 12         # 最大连接数
+      maximum-pool-size: 60         # 最大连接数
       auto-commit: true             # 自动提交
       idle-timeout: 600000          # 连接超时的最大时长（毫秒），超时则被释放（retired），默认：10 分钟
       pool-name: "数据库连接池" # 连接池名称
-      max-lifetime: 1800000         # 连接的生命时长（毫秒），超时而且没被使用则被释放（retired），默认： 30 分钟
+      max-lifetime: 60000         # 连接的生命时长（毫秒），超时而且没被使用则被释放（retired），默认： 30 分钟(1800000)
       read-only: false # 从池获得的连接是否处于只读模式
+      # 连接到数据库时等待的最长时间(秒)
+      login-timeout: 5
+      # 池中维护的最小空闲连接数
+      minimum-idle: 10
 
 mybatis-plus:
   global-config:
