@@ -21,7 +21,7 @@ public class AdminHome {
         return "/admin/index";
     }
     @AdminLoginCheck
-    @RequestMapping(value = "/admin/hostlist")
+    @RequestMapping(value = "/admin/vhostList")
     public String hostlist(){
         return "/admin/hostlist";
     }
