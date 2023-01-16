@@ -195,3 +195,103 @@
 2023-01-16 19:22:12 [ http-nio-8080-exec-2:423351 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
 2023-01-16 19:22:12 [ http-nio-8080-exec-2:423354 ] - [ INFO ] [VhostWeb-Authorization] UUID:admin 请求鉴权
 2023-01-16 19:22:12 [ http-nio-8080-exec-2:423357 ] - [ INFO ] UUID:admin,鉴权成功
+2023-01-16 20:29:01 [ http-nio-8080-exec-6:4432719 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:29:02 [ http-nio-8080-exec-9:4433371 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:30:14 [ SpringApplicationShutdownHook:4505450 ] - [ INFO ] 数据库连接池 - Shutdown initiated...
+2023-01-16 20:30:14 [ SpringApplicationShutdownHook:4505455 ] - [ INFO ] 数据库连接池 - Shutdown completed.
+2023-01-16 20:30:20 [ main:698 ] - [ INFO ] Starting BtVhostApplication using Java 17.0.4.1 on LAPTOP-E2DBMP27 with PID 4584 (C:\Users\Lenovo\Desktop\BtVhost\target\classes started by Lenovo in C:\Users\Lenovo\Desktop\BtVhost)
+2023-01-16 20:30:20 [ main:700 ] - [ INFO ] No active profile set, falling back to 1 default profile: "default"
+2023-01-16 20:30:21 [ main:1382 ] - [ INFO ] Multiple Spring Data modules found, entering strict repository configuration mode
+2023-01-16 20:30:21 [ main:1385 ] - [ INFO ] Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2023-01-16 20:30:21 [ main:1426 ] - [ INFO ] Finished Spring Data repository scanning in 27 ms. Found 0 Redis repository interfaces.
+2023-01-16 20:30:22 [ main:2267 ] - [ INFO ] Tomcat initialized with port(s): 8080 (http)
+2023-01-16 20:30:22 [ main:2278 ] - [ INFO ] Initializing ProtocolHandler ["http-nio-8080"]
+2023-01-16 20:30:22 [ main:2279 ] - [ INFO ] Starting service [Tomcat]
+2023-01-16 20:30:22 [ main:2279 ] - [ INFO ] Starting Servlet engine: [Apache Tomcat/9.0.65]
+2023-01-16 20:30:22 [ main:2382 ] - [ INFO ] Initializing Spring embedded WebApplicationContext
+2023-01-16 20:30:22 [ main:2382 ] - [ INFO ] Root WebApplicationContext: initialization completed in 1636 ms
+2023-01-16 20:30:23 [ main:3525 ] - [ WARN ] [THYMELEAF][main] Template Mode 'HTML5' is deprecated. Using Template Mode 'HTML' instead.
+2023-01-16 20:30:23 [ main:3758 ] - [ INFO ] Starting ProtocolHandler ["http-nio-8080"]
+2023-01-16 20:30:23 [ main:3777 ] - [ INFO ] Tomcat started on port(s): 8080 (http) with context path ''
+2023-01-16 20:30:23 [ main:3788 ] - [ INFO ] ++++++++ 开始校验授权 ++++++++
+2023-01-16 20:30:24 [ main:4282 ] - [ INFO ] 校验成功，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:30:24 [ main:4282 ] - [ INFO ] ++++++++ 授权校验结束 ++++++++
+2023-01-16 20:30:24 [ main:4287 ] - [ INFO ] Started BtVhostApplication in 4.118 seconds (JVM running for 4.823)
+2023-01-16 20:30:35 [ http-nio-8080-exec-4:15196 ] - [ INFO ] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-01-16 20:30:35 [ http-nio-8080-exec-4:15197 ] - [ INFO ] Initializing Servlet 'dispatcherServlet'
+2023-01-16 20:30:35 [ http-nio-8080-exec-4:15198 ] - [ INFO ] Completed initialization in 1 ms
+2023-01-16 20:30:36 [ http-nio-8080-exec-4:16194 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:30:46 [ http-nio-8080-exec-1:26076 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:30:46 [ http-nio-8080-exec-1:26310 ] - [ WARN ] 数据库连接池 - idleTimeout is close to or more than maxLifetime, disabling it.
+2023-01-16 20:30:46 [ http-nio-8080-exec-1:26310 ] - [ INFO ] 数据库连接池 - Starting...
+2023-01-16 20:30:46 [ http-nio-8080-exec-1:26932 ] - [ INFO ] 数据库连接池 - Start completed.
+2023-01-16 20:30:50 [ http-nio-8080-exec-3:30206 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:30:50 [ http-nio-8080-exec-3:30226 ] - [ INFO ] [VhostWeb-Authorization] UUID:admin 请求鉴权
+2023-01-16 20:30:50 [ http-nio-8080-exec-3:30232 ] - [ INFO ] UUID:admin,鉴权成功
+2023-01-16 20:32:11 [ http-nio-8080-exec-6:111758 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:32:11 [ http-nio-8080-exec-6:111762 ] - [ INFO ] [VhostWeb-Authorization] UUID:admin 请求鉴权
+2023-01-16 20:32:11 [ http-nio-8080-exec-6:111767 ] - [ INFO ] UUID:admin,鉴权成功
+2023-01-16 20:32:13 [ http-nio-8080-exec-2:113488 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:32:14 [ http-nio-8080-exec-9:114159 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:32:14 [ http-nio-8080-exec-10:114819 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:32:15 [ http-nio-8080-exec-4:115467 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:32:32 [ http-nio-8080-exec-1:132364 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:32:33 [ http-nio-8080-exec-1:133070 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:32:37 [ http-nio-8080-exec-3:137617 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:32:37 [ http-nio-8080-exec-3:137621 ] - [ INFO ] [VhostWeb-Authorization] UUID:admin 请求鉴权
+2023-01-16 20:32:37 [ http-nio-8080-exec-3:137627 ] - [ INFO ] UUID:admin,鉴权成功
+2023-01-16 20:32:38 [ http-nio-8080-exec-8:138489 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:32:39 [ http-nio-8080-exec-5:139159 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:32:39 [ http-nio-8080-exec-5:139161 ] - [ INFO ] [VhostWeb-Authorization] UUID:admin 请求鉴权
+2023-01-16 20:32:39 [ http-nio-8080-exec-5:139164 ] - [ INFO ] UUID:admin,鉴权成功
+2023-01-16 20:32:59 [ http-nio-8080-exec-6:159872 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:32:59 [ http-nio-8080-exec-6:159874 ] - [ INFO ] [VhostWeb-Authorization] UUID:admin 请求鉴权
+2023-01-16 20:32:59 [ http-nio-8080-exec-6:159878 ] - [ INFO ] UUID:admin,鉴权成功
+2023-01-16 20:33:18 [ http-nio-8080-exec-10:178254 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:33:18 [ http-nio-8080-exec-10:178257 ] - [ INFO ] [VhostWeb-Authorization] UUID:admin 请求鉴权
+2023-01-16 20:33:18 [ http-nio-8080-exec-4:179036 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:33:33 [ http-nio-8080-exec-6:193155 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:33:35 [ http-nio-8080-exec-5:195579 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:33:35 [ http-nio-8080-exec-5:195583 ] - [ INFO ] [VhostWeb-Authorization] UUID:admin 请求鉴权
+2023-01-16 20:33:35 [ http-nio-8080-exec-5:195587 ] - [ INFO ] UUID:admin,鉴权成功
+2023-01-16 20:33:44 [ http-nio-8080-exec-5:204149 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:33:44 [ http-nio-8080-exec-5:204152 ] - [ INFO ] [VhostWeb-Authorization] UUID:admin 请求鉴权
+2023-01-16 20:33:44 [ http-nio-8080-exec-5:204157 ] - [ INFO ] UUID:admin,鉴权成功
+2023-01-16 20:33:44 [ http-nio-8080-exec-4:204985 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:33:44 [ http-nio-8080-exec-4:204987 ] - [ INFO ] [VhostWeb-Authorization] UUID:admin 请求鉴权
+2023-01-16 20:33:44 [ http-nio-8080-exec-4:204990 ] - [ INFO ] UUID:admin,鉴权成功
+2023-01-16 20:33:58 [ http-nio-8080-exec-10:218437 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:33:58 [ http-nio-8080-exec-10:218439 ] - [ INFO ] [VhostWeb-Authorization] UUID:admin 请求鉴权
+2023-01-16 20:33:58 [ http-nio-8080-exec-10:218443 ] - [ INFO ] UUID:admin,鉴权成功
+2023-01-16 20:41:20 [ SpringApplicationShutdownHook:660556 ] - [ INFO ] 数据库连接池 - Shutdown initiated...
+2023-01-16 20:41:20 [ SpringApplicationShutdownHook:660563 ] - [ INFO ] 数据库连接池 - Shutdown completed.
+2023-01-16 20:41:25 [ main:1020 ] - [ INFO ] Starting BtVhostApplication using Java 17.0.4.1 on LAPTOP-E2DBMP27 with PID 18000 (C:\Users\Lenovo\Desktop\BtVhost\target\classes started by Lenovo in C:\Users\Lenovo\Desktop\BtVhost)
+2023-01-16 20:41:25 [ main:1023 ] - [ INFO ] No active profile set, falling back to 1 default profile: "default"
+2023-01-16 20:41:26 [ main:1925 ] - [ INFO ] Multiple Spring Data modules found, entering strict repository configuration mode
+2023-01-16 20:41:26 [ main:1928 ] - [ INFO ] Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2023-01-16 20:41:26 [ main:1977 ] - [ INFO ] Finished Spring Data repository scanning in 31 ms. Found 0 Redis repository interfaces.
+2023-01-16 20:41:27 [ main:2866 ] - [ INFO ] Tomcat initialized with port(s): 8080 (http)
+2023-01-16 20:41:27 [ main:2876 ] - [ INFO ] Initializing ProtocolHandler ["http-nio-8080"]
+2023-01-16 20:41:27 [ main:2876 ] - [ INFO ] Starting service [Tomcat]
+2023-01-16 20:41:27 [ main:2876 ] - [ INFO ] Starting Servlet engine: [Apache Tomcat/9.0.65]
+2023-01-16 20:41:27 [ main:2971 ] - [ INFO ] Initializing Spring embedded WebApplicationContext
+2023-01-16 20:41:27 [ main:2971 ] - [ INFO ] Root WebApplicationContext: initialization completed in 1884 ms
+2023-01-16 20:41:28 [ main:4133 ] - [ WARN ] [THYMELEAF][main] Template Mode 'HTML5' is deprecated. Using Template Mode 'HTML' instead.
+2023-01-16 20:41:28 [ main:4357 ] - [ INFO ] Starting ProtocolHandler ["http-nio-8080"]
+2023-01-16 20:41:28 [ main:4377 ] - [ INFO ] Tomcat started on port(s): 8080 (http) with context path ''
+2023-01-16 20:41:28 [ main:4388 ] - [ INFO ] ++++++++ 开始校验授权 ++++++++
+2023-01-16 20:41:29 [ main:4902 ] - [ INFO ] 校验成功，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:41:29 [ main:4902 ] - [ INFO ] ++++++++ 授权校验结束 ++++++++
+2023-01-16 20:41:29 [ main:4907 ] - [ INFO ] Started BtVhostApplication in 4.62 seconds (JVM running for 5.676)
+2023-01-16 20:42:03 [ http-nio-8080-exec-1:39564 ] - [ INFO ] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-01-16 20:42:03 [ http-nio-8080-exec-1:39564 ] - [ INFO ] Initializing Servlet 'dispatcherServlet'
+2023-01-16 20:42:03 [ http-nio-8080-exec-1:39565 ] - [ INFO ] Completed initialization in 1 ms
+2023-01-16 20:42:04 [ http-nio-8080-exec-1:40387 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:42:04 [ http-nio-8080-exec-1:40485 ] - [ INFO ] [VhostWeb-Authorization] UUID:admin 请求鉴权
+2023-01-16 20:42:06 [ http-nio-8080-exec-3:41821 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:42:12 [ http-nio-8080-exec-2:47876 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:42:12 [ http-nio-8080-exec-2:47879 ] - [ INFO ] [VhostWeb-Authorization] UUID:admin 请求鉴权
+2023-01-16 20:42:12 [ http-nio-8080-exec-2:47886 ] - [ INFO ] UUID:admin,鉴权成功
+2023-01-16 20:43:53 [ http-nio-8080-exec-10:149260 ] - [ INFO ] 接口校验通过，授权有效期：2023-01-10 00:00:00 - 2024-01-10 00:00:00
+2023-01-16 20:43:53 [ http-nio-8080-exec-10:149262 ] - [ INFO ] [VhostWeb-Authorization] UUID:admin 请求鉴权
+2023-01-16 20:43:53 [ http-nio-8080-exec-10:149268 ] - [ INFO ] UUID:admin,鉴权成功

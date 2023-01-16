@@ -120,3 +120,5 @@ org.attoparser.ParseException: (Line = 93, Column = 134) Malformed markup: Attri
 2023-01-16 19:16:51 [ http-nio-8080-exec-2:102913 ] - [ ERROR ] UUID:admin,Redis鉴权失败！
 2023-01-16 19:17:36 [ http-nio-8080-exec-3:147095 ] - [ ERROR ] UUID:admin,Redis鉴权失败！
 2023-01-16 19:21:21 [ http-nio-8080-exec-6:372280 ] - [ ERROR ] UUID:admin,Redis鉴权失败！
+2023-01-16 20:33:18 [ http-nio-8080-exec-10:178261 ] - [ ERROR ] UUID:admin,Redis鉴权失败！
+2023-01-16 20:42:05 [ http-nio-8080-exec-1:41144 ] - [ ERROR ] UUID:admin,Redis鉴权失败！
