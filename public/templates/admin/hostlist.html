@@ -13,7 +13,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
     <link rel="stylesheet" type="text/css" href="/css/materialdesignicons.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap4/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/animate.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.min.css">
     <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
@@ -73,14 +73,16 @@
     </div>
 </div>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
-<script type="text/javascript" src="/js/bootstrap4/popper.min.js"></script>
-<script type="text/javascript" src="/js/bootstrap4/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/popper.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/js/perfect-scrollbar.min.js"></script>
 <script type="text/javascript" src="/js/jquery.cookie.min.js"></script>
 <script type="text/javascript" src="/js/main.min.js"></script>
 <script type="text/javascript" src="/js/jquery-confirm/jquery-confirm.min.js"></script>
+<!--表格样式-->
 <script type="text/javascript" src="/js/bootstrap-table/bootstrap-table.js"></script>
 <script type="text/javascript" src="/js/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+<!--消息提示-->
 <script type="text/javascript" src="/js/lyear-loading.js"></script>
 <script type="text/javascript" src="/js/bootstrap-notify.min.js"></script>
 <script type="text/javascript" src="/js/fn-hs.js"></script>
@@ -180,9 +182,12 @@
             idField: 'id',             // 每行的唯一标识字段
             toolbar: '#toolbar',       // 工具按钮容器
             //clickToSelect: true,     // 是否启用点击选中行
-            showColumns: true,         // 是否显示所有的列
-            showRefresh: true,         // 是否显示刷新按钮
-            showToggle: true,        // 是否显示详细视图和列表视图的切换按钮(clickToSelect同时设置为true时点击会报错)
+            search: true,              //搜索框
+            showSearchButton:true,
+            searchText:'请输入网站名称',
+            showColumns: false,         // 是否显示所有的列
+            showRefresh: false,         // 是否显示刷新按钮
+            showToggle: false,        // 是否显示详细视图和列表视图的切换按钮(clickToSelect同时设置为true时点击会报错)
             pagination: true,                    // 是否显示分页
             sortOrder: "desc",                    // 排序方式
             sortName: "id",                     //默认排序字段
@@ -191,6 +196,7 @@
                     gn: 'listzj',         // 请求功能
                     limit: params.limit,         // 每页数据量
                     offset: params.offset,       // sql语句起始索引
+                    search: params.search,
                     page: (params.offset / params.limit) + 1,
                     sort: params.sort,           // 排序的列名
                     sortOrder: params.order      // 排序方式'asc' 'desc'
