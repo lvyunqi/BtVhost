@@ -30,7 +30,7 @@ public class AdminHome {
     }
 
     @AdminLoginCheck
-    @RequestMapping(value = "/admin/addhost")
+    @RequestMapping(value = "/admin/addVhost")
     public String addhost(Model model){
         model.addAttribute("title", "控制台");
         model.addAttribute("page","adminHome");
