@@ -28,17 +28,19 @@ public class RedisConstant {
     public static final int EXRP_DAY = 60 * 60 * 24;
 
     /**
-     * redis-key-前缀-shiro:cache:
+     * redis-key-前缀-vhostAdmin:cache:
      */
     public static final String PREFIX_VHOST_CACHE = "vhostAdmin:cache:";
 
     /**
-     * redis-key-前缀-shiro:access_token:
+     * redis-key-前缀-vhostAdmin:access_token:
      */
     public static final String PREFIX_VHOST_ACCESS_TOKEN = "vhostAdmin:access_token:";
+    public static final String PREFIX_VHOST_SERVER_TOKEN = "vhostSys:server_token:";
+    public static final String PREFIX_VHOST_PROBE_DATA = "vhostSys:probe_data:";
 
     /**
-     * redis-key-前缀-shiro:refresh_token:
+     * redis-key-前缀-vhostAdmin:refresh_token:
      */
     public static final String PREFIX_VHOST_REFRESH_TOKEN = "vhostAdmin:refresh_token:";
 

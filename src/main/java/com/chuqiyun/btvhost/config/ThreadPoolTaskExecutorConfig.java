@@ -16,13 +16,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 @EnableAsync // 开启异步配置
 public class ThreadPoolTaskExecutorConfig {
 
-    @Bean
+    @Bean(name = "taskExecutor")
     public TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         //设置核心线程数
-        executor.setCorePoolSize(10);
+        executor.setCorePoolSize(15);
         //设置最大线程数
-        executor.setMaxPoolSize(20);
+        executor.setMaxPoolSize(30);
         //缓冲队列200：用来缓冲执行任务的队列
         executor.setQueueCapacity(200);
         //线程活路时间 60 秒

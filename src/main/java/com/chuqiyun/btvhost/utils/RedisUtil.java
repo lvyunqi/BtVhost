@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -154,6 +155,36 @@ public class RedisUtil {
         if (keys != null && keys.size() > 0) {
             redisTemplate.delete(keys);
         }
+    }
+
+    public static void setRedLock(String key, String value){
+        if (!open) {
+            return;
+        }
+        //获取分布式锁
+        String lockKey = "lockKey";
+        boolean locked = Boolean.TRUE.equals(redisTemplate.opsForValue().setIfAbsent(lockKey, "1", 1, TimeUnit.SECONDS));
+        if (locked) {
+            //插入数据
+            redisTemplate.opsForValue().set(key, value);
+            //释放锁
+            redisTemplate.delete(lockKey);
+        }
+    }
+
+    public static HashMap<String,String> getHashMap(String Hk){
+        if (!open) {
+            return null;
+        }
+        Set<String> keys = redisTemplate.keys(Hk + "*");
+        HashMap<String, String> map = new HashMap<>();
+        assert keys != null;
+        for (String key : keys){
+            //获取key对应的value
+            String value = (String) redisTemplate.opsForValue().get(key);
+            map.put(key,value);
+        }
+        return map;
     }
 
     /**

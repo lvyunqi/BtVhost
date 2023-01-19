@@ -62,7 +62,7 @@ spring:
       auto-commit: true             # 自动提交
       idle-timeout: 600000          # 连接超时的最大时长（毫秒），超时则被释放（retired），默认：10 分钟
       pool-name: "数据库连接池" # 连接池名称
-      max-lifetime: 60000         # 连接的生命时长（毫秒），超时而且没被使用则被释放（retired），默认： 30 分钟(1800000)
+      max-lifetime: 1800000         # 连接的生命时长（毫秒），超时而且没被使用则被释放（retired），默认： 30 分钟(1800000)
       read-only: false # 从池获得的连接是否处于只读模式
       # 连接到数据库时等待的最长时间(秒)
       login-timeout: 5
