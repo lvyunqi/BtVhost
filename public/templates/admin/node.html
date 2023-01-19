@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+<meta name="keywords" content="初七云,云虚拟主机管理系统">
+<meta name="description" content="云虚拟主机管理系统">
+<title>控制中心 - 云虚拟主机管理系统</title>
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="stylesheet" type="text/css" href="/css/materialdesignicons.min.css">
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/css/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/css/style.min.css">
+<link rel="stylesheet" type="text/css" href="/css/flag-icon.css">
+</head>
+<body>
+    <div class="lyear-layout-web">
+        <div class="lyear-layout-container">
+          <div id="header" th:include="admin/common/header :: common_header(${title},${page},${page_tab})"></div>
+          <!--页面主要内容-->
+          <main class="lyear-layout-content">
+      
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="co-lg-12">
+                        <div class="card">
+                            <header class="card-header"><div class="card-title">服务器列表</div></header>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div id="toolbar" class="toolbar-btn-action">
+                                        <a id="btn_add" type="button" href="/admin/addNode" class="shadow-lg btn btn-primary btn-round" aria-hidden="true">
+                                            <span class="mdi mdi-plus"></span>新增节点
+                                        </a>
+                                        <button id="btn_delete" type="button" class="shadow-lg btn btn-danger btn-round" aria-hidden="true">
+                                          <span class="mdi mdi-window-close"></span>删除节点
+                                        </button>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+      
+            </div>
+      
+          </main>
+          <!--End 页面主要内容-->
+        </div>
+    </div>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/popper.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/perfect-scrollbar.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.cookie.min.js"></script>
+    <script type="text/javascript" src="/js/main.min.js"></script>
+
+</body>
+</html>

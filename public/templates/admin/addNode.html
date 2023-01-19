@@ -53,10 +53,26 @@
                                             <div class="mb-3">
                                                 <label for="nodeOS" class="form-label">服务器操作系统</label>
                                                 <select class="form-select" id="nodeOS" name="nodeOS" aria-label="操作系统">
-                                                    <option value="1">Linux</option>
-                                                    <option value="2">Windows</option>
+                                                    <option value="0">Linux</option>
+                                                    <option value="1">Windows</option>
                                                 </select>
                                                 <small class="form-text"><code>注意只有Windows系统才支持IIS服务！</code></small>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="nodeSoft" class="form-label">服务器环境架构</label>
+                                                <select class="form-select" id="nodeSoft" name="nodeSoft" aria-label="服务器环境架构">
+                                                    <option value="0">LNMP</option>
+                                                    <option value="1">LAMP</option>
+                                                    <option value="2">IIS</option>
+                                                    <option value="3">LNP</option>
+                                                    <option value="4">LAP</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="nodeGroup" class="form-label">地区所属</label>
+                                                <input class="form-control" type="text" id="nodeGroup" name="nodeGroup" value="" placeholder="中国-北京" aria-describedby="button-addon2">
+                                                <button class="btn btn-outline-secondary" type="button" id="button-addon2">自动生成</button>
+                                                <small class="form-text">格式：中国-北京</small>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="nodeSSL" class="form-label">安全访问(HTTPS)</label>
@@ -64,6 +80,13 @@
                                                     <input class="form-check-input" type="checkbox" role="switch" id="nodeSSL">
                                                 </div>
                                                 <small class="form-text">如果您的宝塔面板开启了<code>[面板SSL]</code>则需要把这个开关打开</small>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="nodeOk" class="form-label">开通激活</label>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="nodeOk">
+                                                </div>
+                                                <small class="form-text">禁止该服务器开通新产品，请关闭</small>
                                             </div>
                                             <div class="d-grid gap-2">
                                                 <button class="btn btn-primary" type="reset" id="okButton"><i class="mdi mdi-checkbox-marked-circle-outline"></i>确认添加</button>

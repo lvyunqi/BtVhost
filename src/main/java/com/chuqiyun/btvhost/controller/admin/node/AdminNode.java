@@ -14,11 +14,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class AdminNode {
     @AdminLoginCheck
+    @RequestMapping(value = "/admin/node")
+    public String node(Model model) {
+        model.addAttribute("title", "服务器节点列表");
+        model.addAttribute("page","region");
+        model.addAttribute("page_tab","node");
+        return "/admin/node";
+    }
+    @AdminLoginCheck
     @RequestMapping(value = "/admin/addNode")
-    public String adminRegion(Model model) {
+    public String addNode(Model model) {
         model.addAttribute("title", "添加宝塔服务器节点");
-        model.addAttribute("page","addNode");
-        model.addAttribute("page_tab","addNode");
+        model.addAttribute("page","region");
+        model.addAttribute("page_tab","node");
         return "/admin/addNode";
     }
 }

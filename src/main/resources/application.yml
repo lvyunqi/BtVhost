@@ -34,7 +34,7 @@ spring:
     # 模板编码
     encoding: UTF-8
     # 要运⽤于模板之上的模板模式。另⻅ StandardTemplate-ModeHandlers( 默认值： HTML5)
-    mode: HTML5
+    mode: HTML
     # 在构建 URL 时添加到视图名称前的前缀（默认值： classpath:/templates/ ）
     prefix: file:public/templates/
     # 在构建 URL 时添加到视图名称后的后缀（默认值： .html ）
