@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.chuqiyun</groupId>
     <artifactId>ChuqiCloudBtVhost</artifactId>
-    <version>0.0.7</version>
+    <version>0.0.8</version>
     <name>宝塔虚拟主机管理系统</name>
     <description>初七云宝塔虚拟主机集群自动化管理系统</description>
 
