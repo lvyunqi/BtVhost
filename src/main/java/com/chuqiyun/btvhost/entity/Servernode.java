@@ -1,11 +1,14 @@
 package com.chuqiyun.btvhost.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * (Servernode)表实体类
@@ -17,7 +20,7 @@ import java.io.Serializable;
 @TableName(value = "serverNode")
 @Data
 public class Servernode extends Model<Servernode> {
-    
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
     //节点地址
     private String host;
@@ -37,6 +40,7 @@ public class Servernode extends Model<Servernode> {
     private Integer groupclass;
     //状态 默认0=开启 1=关闭
     private Integer satus;
+    private Date createdate;
 
 
 
