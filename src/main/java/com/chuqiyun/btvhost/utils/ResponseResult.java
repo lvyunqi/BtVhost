@@ -85,7 +85,8 @@ public class ResponseResult<T> implements Serializable {
         ACCOUNT_LOCK(4010001,"该账号被锁定,请联系系统管理员"),
         ACCOUNT_HAS_DELETED_ERROR(4010001,"该账号已被删除，请联系系统管理员"),
         TOKEN_PAST_DUE(4010002,"token失效,请刷新token"),
-        NOT_PERMISSION(4030001,"没有权限访问该资源");
+        NOT_PERMISSION(4030001,"没有权限访问该资源"),
+        API_AUTH_ERROR(5010001,"apiKey或secretKey不存在");
 
         RespCode(int code, String msg) {
             this.code = code;

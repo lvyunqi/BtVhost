@@ -38,6 +38,7 @@ public class RedisConstant {
     public static final String PREFIX_VHOST_ACCESS_TOKEN = "vhostAdmin:access_token:";
     public static final String PREFIX_VHOST_SERVER_TOKEN = "vhostSys:server_token:";
     public static final String PREFIX_VHOST_PROBE_DATA = "vhostSys:probe_data:";
+    public static final String PREFIX_VHOST_API_TOKEN = "vhostSys:access_token";
 
     /**
      * redis-key-前缀-vhostAdmin:refresh_token:

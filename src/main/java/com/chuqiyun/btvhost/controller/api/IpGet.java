@@ -1,5 +1,6 @@
 package com.chuqiyun.btvhost.controller.api;
 
+import com.chuqiyun.btvhost.annotation.ApiCheck;
 import com.chuqiyun.btvhost.utils.ResponseResult;
 import org.springframework.web.bind.annotation.*;
 
