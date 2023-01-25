@@ -12,4 +12,5 @@ public class Regions {
     private String region;
     private Integer nodenum;
     private Integer valuenow;
+    private String diskwidth;
 }

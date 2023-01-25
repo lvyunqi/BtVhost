@@ -7,7 +7,9 @@ import com.chuqiyun.btvhost.annotation.AdminLoginCheck;
 import com.chuqiyun.btvhost.entity.RegionClassList;
 import com.chuqiyun.btvhost.entity.Regionclass;
 import com.chuqiyun.btvhost.entity.Regions;
+import com.chuqiyun.btvhost.entity.Servernode;
 import com.chuqiyun.btvhost.service.RegionclassService;
+import com.chuqiyun.btvhost.service.ServernodeService;
 import com.chuqiyun.btvhost.utils.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.chuqiyun.btvhost.model.DiskOccupancy.allDiskValue;
+
 /**
  * @author mryunqi
  * @date 2023/1/11
@@ -25,6 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminRegion {
     private final RegionclassService regionclassService;
+    private final ServernodeService servernodeService;
     @AdminLoginCheck
     @RequestMapping(value = "/admin/region")
     public String adminRegion(Model model) {
@@ -57,11 +62,14 @@ public class AdminRegion {
                     Regions region = new Regions();
                     region.setId(lowRegion.getId());
                     region.setRegion(lowRegion.getFirstclass());
-                    if (lowRegion.getNodelist() == null){
-                        region.setNodenum(0);
-                    }else {
-                        region.setNodenum(JSONObject.parseObject(lowRegion.getNodelist()).size());
-                    }
+                    QueryWrapper<Servernode> node = new QueryWrapper<>();
+                    node.eq("groupClass",lowRegion.getId());
+                    List<Servernode> nodesList = servernodeService.list(node);
+                    region.setNodenum(nodesList.size());
+
+                    int value = allDiskValue(lowRegion.getId(),servernodeService);
+                    region.setValuenow(value);
+                    region.setDiskwidth(regionDiskColour(value));
                     regions.add(region);
                 }
                 result.setRegions(regions);
@@ -76,9 +84,24 @@ public class AdminRegion {
                     result.setCode(countryJson.getString("code"));
                 }
             }
+
             list.add(result);
         }
         return list;
+    }
+
+    public String regionDiskColour(int value){
+        if (value<=25){
+            return "bg-success";
+        } else if (value <= 50) {
+            return "bg-info";
+        }else if (value <= 75) {
+            return "";
+        }else if (value <= 85) {
+            return "bg-warning";
+        }else {
+            return "bg-danger";
+        }
     }
 
 }
