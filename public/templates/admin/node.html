@@ -11,11 +11,12 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-touch-fullscreen" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="stylesheet" type="text/css" href="/css/materialdesignicons.min.css">
-<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="/css/animate.min.css">
-<link rel="stylesheet" type="text/css" href="/css/style.min.css">
-<link rel="stylesheet" type="text/css" href="/css/flag-icon.css">
+    <link rel="stylesheet" type="text/css" href="/css/materialdesignicons.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/js/bootstrap-table/bootstrap-table.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.min.css">
+    <link rel="stylesheet" type="text/css" href="/js/jquery-confirm/jquery-confirm.min.css" >
 </head>
 <body>
     <div class="lyear-layout-web">
@@ -42,13 +43,100 @@
                                     </div>
                                     <br>
                                     <div class="row">
-                                        
+                                        <table id="tb_departments"></table>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
+                <!-- 弹窗元素 -->
+                <div class="modal fade" id="tanchuang" tabindex="-1" role="dialog" aria-labelledby="tanchuang" aria-hidden="true"  >
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title" id="exampleModalChangeTitle">编辑宝塔</h6>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <input type="hidden" name="idr" id="idr">
+
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="control-label">宝塔IP：</label>
+                                        <input type="text" class="form-control" name="recipientname" id="recipientname"/>
+                                        <small class="form-text">如果面板开启了域名访问则需要在此填写配置的域名<code>（建议与解析IP所不同）</code></small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="control-label">宝塔端口：</label>
+                                        <input type="text" class="form-control" name="messagetext" id="messagetext"/>
+                                        <small class="form-text"><code>不建议端口使用8888等端口，以免造成安全隐患！</code></small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message-text" class="control-label">宝塔密钥：</label>
+                                        <textarea type="text" class="form-control" name="messagekey" id="messagekey"></textarea>
+                                        <small class="form-text">宝塔设置->APi接口->接口密钥</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="nodeOS" class="form-label">服务器操作系统</label>
+                                        <select class="form-select" id="nodeOS" name="nodeOS" aria-label="操作系统">
+                                            <option value="0">Linux</option>
+                                            <option value="1">Windows</option>
+                                        </select>
+                                        <small class="form-text"><code>注意只有Windows系统才支持IIS服务！</code></small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="nodeSoft" class="form-label">服务器环境架构</label>
+                                        <select class="form-select" id="nodeSoft" name="nodeSoft" aria-label="服务器环境架构">
+                                            <option value="0">LNMP</option>
+                                            <option value="1">LAMP</option>
+                                            <option value="2">IIS</option>
+                                            <option value="3">LNP</option>
+                                            <option value="4">LAP</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="nodeGroup" class="form-label">地区所属</label>
+                                        <input class="form-control" type="text" id="nodeGroup" name="nodeGroup" value="" placeholder="中国-北京" aria-describedby="button-addon2">
+                                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">自动生成</button>
+                                        <small class="form-text">格式：中国-北京</small>
+                                    </div>
+                                    </br>
+                                    <div class="form-group">
+                                        <label class="btn-block" for="web_site_status">安全访问(HTTPS)</label>
+                                        <div class="col-xs-6">
+
+                                            <div class="form-check form-switch">
+                                                <input type="checkbox" class="form-check-input" name="xieyi" id="xieyi">
+                                                <label class="form-check-label" for="xieyi"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="btn-block" for="web_site_status">宝塔接口开关</label>
+                                        <div class="col-xs-6">
+
+                                            <div class="form-check form-switch">
+                                                <input type="checkbox" class="form-check-input" name="btkg" id="btkg" checked="true">
+                                                <label class="form-check-label" for="btkg"></label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">关闭</button>
+                                <button type="button" class="btn btn-primary" onclick="bj_bc()">确认保存</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--弹窗结束-->
       
             </div>
       
@@ -62,6 +150,313 @@
     <script type="text/javascript" src="/js/perfect-scrollbar.min.js"></script>
     <script type="text/javascript" src="/js/jquery.cookie.min.js"></script>
     <script type="text/javascript" src="/js/main.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-confirm/jquery-confirm.min.js"></script>
+    <!--表格样式-->
+    <script type="text/javascript" src="/js/bootstrap-table/bootstrap-table.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <!--消息提示-->
+    <script type="text/javascript" src="/js/lyear-loading.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-notify.min.js"></script>
+    <script type="text/javascript" src="/js/fn-hs.js"></script>
+    <script src="/js/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="/js/md5.js"></script>
+    <script type="text/javascript">
+        //主机列表js
+        const pagination = {
+            // 分页方式：[client] 客户端分页，[server] 服务端分页
+            sidePagination: "server",
+            // 初始化加载第一页，默认第一页
+            pageNumber: 1,
+            // 每页的记录行数
+            pageSize: 10,
+            // 可供选择的每页的行数 - (亲测大于1000存在渲染问题)
+            pageList: [5, 10, 25, 50, 100],
+            // 在上百页的情况下体验较好 - 能够显示首尾页
+            paginationLoop: true,
+            // 展示首尾页的最小页数
+            paginationPagesBySide: 2
+        };
 
+        /**
+         * 按钮相关配置
+         **/
+        const button = {
+            // 按钮的类
+            buttonsClass: 'default',
+            // 类名前缀
+            buttonsPrefix: 'btn'
+        }
+
+        /**
+         * 图标相关配置
+         **/
+        const icon = {
+            // 图标前缀
+            iconsPrefix: 'mdi',
+            // 图标大小
+            iconSize: 'mini',
+            // 图标的设置
+            icons: {
+                columns: 'mdi-table-column-remove',
+                paginationSwitchDown: 'mdi-door-closed',
+                paginationSwitchUp: 'mdi-door-open',
+                refresh: 'mdi-refresh',
+                toggleOff: 'mdi-toggle-switch-off',
+                toggleOn: 'mdi-toggle-switch',
+                fullscreen: 'mdi-monitor-screenshot',
+                detailOpen: 'mdi-plus',
+                detailClose: 'mdi-minus'
+            }
+        };
+        /**
+         * 表格相关的配置
+         **/
+        const table={
+            classes: 'table table-bordered table-hover table-striped lyear-table',
+            url: '/admin/getAllNode',
+            method: 'get',
+            contentType : "application/json",  //请求格式
+            dataType : 'json',        // 因为本示例中是跨域的调用,所以涉及到ajax都采用jsonp,
+            uniqueId: 'id',
+            idField: 'id', //
+            toolbar: '#toolbar',
+            // 是否分页
+            pagination: true,
+            // 是否显示所有的列
+            showColumns: true,
+            // 是否显示刷新按钮
+            showRefresh: true,
+            // 显示图标
+            showButtonIcons: true,
+            // 显示文本
+            showButtonText: false,
+            // 显示全屏
+            showFullscreen: true,
+            // 开关控制分页
+            showPaginationSwitch: true,
+            // 总数字段
+            totalField: 'total',
+            // 当字段为 undefined 显示
+            undefinedText: '-',
+            // 排序方式
+            sortOrder: "asc",
+            ...icon,
+            ...pagination,
+            ...button,      //默认排序字段
+        }
+        /**
+         * 用于演示的列信息
+         **/
+        const columns=[{
+            field: 'example',
+            checkbox: true    // 是否显示复选框
+        }, {
+            field: 'id',
+            title: 'ID',
+            sortable: true    // 是否排序
+        }, {
+            field: 'satus',
+            title: '宝塔状态',
+            formatter:function(value,row){
+                return '<a href="#!" class="text-info" title="检测宝塔通信状态" data-toggle="tooltip" onclick="ljztjc(this,'+row.id+');"><i class="mdi mdi-help-circle-outline"></i>点我检测</a>';
+            }
+        },  {
+            field: 'host',
+            title: '宝塔IP',
+        }, {
+            field: 'probetoken',
+            title: '调用密钥',
+            formatter:function(value,row){
+                return '<div style="display: inline-block;"><span>**********</span><a href="#!" onclick="xymy(this,`'+value+'`)"><i class="mdi mdi-eye h6"></i></a></div>';
+            }
+        }, {
+            field: 'createdate',
+            title: '添加时间'
+        }, {
+            field: 'port',
+            title: '宝塔端口'
+        }, {
+            field: 'satus',
+            title: '宝塔情况',
+            formatter:function(value,row){
+                if (row.satus == '1') {
+                    value = '<span class="badge bg-danger"><b>关闭</b></span>';
+                } else if(row.satus == '0') {
+                    value = '<span class="badge bg-success">开启</span>';
+                }else {
+                    value = '<span class="badge bg-secondary">未知</span>' ;
+                }
+                return value;
+            }
+        }, {
+            field: 'operate',
+            title: '宝塔操作',
+            formatter: btnGroup,  // 自定义方法
+            events: {
+                'click .edit-btn': function (event, value, row, index) {
+                    editUser(row);
+                },
+                'click .del-btn': function (event, value, row, index) {
+                    delUser(row);
+                },
+                'click .dj-mf': function (event, value, row, index) {
+                    window.location.href='/admin/help';
+                }
+            }
+        }];
+        // 操作按钮
+        function btnGroup ()
+        {
+            let html =
+                '<a href="#!" class="btn btn-xs btn-default edit-btn" title="编辑" data-bs-toggle="modal" data-bs-target="#tanchuang"><i class="mdi mdi-pencil"></i></a>' +
+                '<a href="#!" class="btn btn-xs btn-default dj-mf" title="对接文档" data-toggle="tooltip"><i class="mdi mdi-cube-outline"></i></a>'+
+                '<a href="#!" class="btn btn-xs btn-default del-btn" title="删除" data-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>';
+            return html;
+        }
+
+        // 操作方法 - 编辑
+        function editUser(row)
+        {
+            document.getElementById("recipientname").value = row.host;
+            document.getElementById("messagetext").value = row.port;
+            document.getElementById("idr").value = row.id;
+            document.getElementById("messagekey").innerHTML = row.skey;
+            //判断系统
+            if (row.os=='0'){
+                document.getElementById("nodeOS").value ='0';
+            }else {
+                document.getElementById("nodeOS").value ='1';
+            }
+            //判断环境
+            if (row.os=='0'){
+                document.getElementById("nodeSoft").value ='0';
+            }else if (row.soft=='1') {
+                document.getElementById("nodeSoft").value ='1';
+            }else if (row.soft=='2'){
+                document.getElementById("nodeSoft").value ='2';
+            }else if (row.soft=='3'){
+                document.getElementById("nodeSoft").value ='3';
+            }else {
+                document.getElementById("nodeSoft").value ='4';
+            }
+            if(row.serverSSL=='1'){$("#xieyi").attr("checked",false);}else{$("#xieyi").attr("checked",true);}
+            if(row.satus=='1'){
+                document.getElementById("btkg").checked = "";
+            }else{
+                document.getElementById("btkg").checked = "false";
+            }
+            $('#tanchuang').modal();		//弹出弹窗
+        }
+        // 操作方法 - 删除
+        function delUser(row,s=true)
+        {
+            if(!confirm('删除后不可恢复\n是否确认删除该宝塔？\n删除的同时也会删除该宝塔在本站开通的主机记录！并不会删除这些主机在您宝塔的数据，如需删除数据请前去主机列表进行删除！！！')){return;}
+            let data = {};
+            data["id"]=row.id;
+            $.post('./ajax.php', data, function (date) {
+                var jsoe= JSON.parse(date);
+                var qk= jsoe.code
+
+                if(qk=='删除成功'){
+                    $("#tb_departments").bootstrapTable('refreshOptions',{pageNumber:1});		//刷新表格
+                    msalert(1,'删除成功！',2000);
+                    msloadingde();
+                }else{
+                    msalert(4,qk,2000);
+                    msloadingde();
+                }
+            })
+        }
+        //状态
+        function xymy(data,value){
+            var valdat=data.parentNode.childNodes[0];
+            if(valdat.innerHTML=='**********'){
+                $(valdat).html(value);
+                $(data.childNodes[0]).removeClass('mdi-eye');
+                $(data.childNodes[0]).addClass('mdi-eye-off');
+            }else{
+                $(valdat).html('**********');
+                $(data.childNodes[0]).removeClass('mdi-eye-off');
+                $(data.childNodes[0]).addClass('mdi-eye');
+            }
+        }
+        //弹窗
+        function bj_bc() {
+            var id=idr.value;
+            var ipe=recipientname.value;
+            var dke=messagetext.value;
+            var keye=messagekey.value;
+            var bs=nodeOS.value;
+            var soft=nodeSoft.value;
+            var group=nodeGroup.value;
+            var xy=xieyi.checked;
+            var kge=btkg.checked;
+            if (xy){xy=0}else {xy=1}
+            if (kge){kge=0}else {kge=1}
+            if(ipe=="" || dke=="" || keye==""||group==""){
+                msalert(3,'表单不能为空！',3000,'#tanchuang');
+            }else{
+                msloading('正在修改中...');
+                let data = {};
+                data["id"]=id
+                data["host"]=ipe;
+                data["port"]=dke;
+                data["skey"]=keye;
+                data["os"]=bs;
+                data["soft"]=soft;
+                data["ssl"]=xy;
+                data["status"]=kge;
+                data["group"]=group;
+                $.ajax({
+                    url:'/admin/upNodeDo',
+                    type:'POST',
+                    data: JSON.stringify(data),
+                    dataType:"json",
+                    contentType: 'application/json',
+                    success:function (result) {
+                        console.log(result)
+                    var qk= result.code
+
+                    if(qk=='20000'){
+                        $("#tb_departments").bootstrapTable('refreshOptions',{pageNumber:1});		//刷新表格
+                        $('#tanchuang').modal('hide');		//关闭弹窗
+                        msalert(1,'修改成功！',3000);
+                        msloadingde();		//关闭加载条
+                    }else{
+                        msalert(4,qk,3000,'#tanchuang');
+                        msloadingde();		//关闭加载条
+                    }
+                }})
+            }}
+        //表开始
+        $('table').bootstrapTable({
+            ...table,
+            // 自定义的查询参数
+            queryParams: function (params) {
+                return {
+                    // 每页数据量
+                    limit: params.limit,
+                    // sql语句起始索引
+                    offset: params.offset,
+                    page: (params.offset / params.limit) + 1,
+                    // 排序的列名
+                    sort: params.sort,
+                    // 排序方式 'asc' 'desc'
+                    sortOrder: params.order
+                };
+            },
+            responseHandler:function (result) {
+                return{
+                    "total":result.data.total,
+                    "rows":result.data.rows
+                }
+
+            },
+            columns,
+            onLoadSuccess: function(data){
+                $("[data-bs-toggle='tooltip']").tooltip();
+            }
+        });
+    </script>
 </body>
 </html>
