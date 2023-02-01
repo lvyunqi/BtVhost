@@ -439,11 +439,8 @@
                     var qk= result.code
 
                     if(qk=='20000'){
-                        $("#tb_departments").bootstrapTable('refreshOptions',{pageNumber:1});		//刷新表格
-                        msalert(1,'获取成功！',3000);
                         msloadingde();		//关闭加载条
                     }else{
-                        msalert(4,qk,3000,'#tanchuang');
                         msloadingde();		//关闭加载条
                     }
                 }
