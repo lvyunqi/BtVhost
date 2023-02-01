@@ -102,7 +102,7 @@
                                     <div class="mb-3">
                                         <label for="nodeGroup" class="form-label">地区所属</label>
                                         <input class="form-control" type="text" id="nodeGroup" name="nodeGroup" value="" placeholder="中国-北京" aria-describedby="button-addon2">
-                                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">自动生成</button>
+                                        <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="getdizhi()">自动生成</button>
                                         <small class="form-text">格式：中国-北京</small>
                                     </div>
                                     </br>
@@ -414,7 +414,6 @@
                     dataType:"json",
                     contentType: 'application/json',
                     success:function (result) {
-                        console.log(result)
                     var qk= result.code
 
                     if(qk=='20000'){
@@ -428,6 +427,28 @@
                     }
                 }})
             }}
+        //获取地址
+        function getdizhi(){
+            let ip=recipientname.value;
+            $.ajax({
+                url:'/api/getIpLocation'+'?ipAddress='+ip,
+                type: 'POST',
+                contentType: 'application/json',
+                success:function (result){
+                    $("#nodeGroup").val(result.data)
+                    var qk= result.code
+
+                    if(qk=='20000'){
+                        $("#tb_departments").bootstrapTable('refreshOptions',{pageNumber:1});		//刷新表格
+                        msalert(1,'获取成功！',3000);
+                        msloadingde();		//关闭加载条
+                    }else{
+                        msalert(4,qk,3000,'#tanchuang');
+                        msloadingde();		//关闭加载条
+                    }
+                }
+            })
+        }
         //表开始
         $('table').bootstrapTable({
             ...table,
