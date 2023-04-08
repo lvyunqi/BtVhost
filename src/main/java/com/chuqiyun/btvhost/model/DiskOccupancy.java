@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.chuqiyun.btvhost.constant.BtConstant;
 import com.chuqiyun.btvhost.entity.Servernode;
 import com.chuqiyun.btvhost.service.ServernodeService;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,7 @@ import static com.chuqiyun.btvhost.bt.BtUtil.sendPost;
  * @author mryunqi
  * @date 2023/1/25
  */
+@Slf4j
 public class DiskOccupancy {
     public static int allDiskValue(int regionId, ServernodeService servernodeService) {
         QueryWrapper<Servernode> nodes = new QueryWrapper<>();
@@ -56,6 +58,17 @@ public class DiskOccupancy {
             if (responseText == null){
                 return 0;
             }
+            try {
+                JSONObject jsonObject = JSONObject.parseObject(responseText);
+                if (jsonObject == null){
+                    return 0;
+                }
+                if (!jsonObject.getBoolean("status")){
+                    return 0;
+                }
+            }catch (Exception e) {
+                log.error(String.valueOf(e));
+            }
             JSONArray jsonArray = JSON.parseArray(responseText);
             List<JSONObject> list = jsonArray.toJavaList(JSONObject.class);
             if (list.size() == 1){
@@ -72,6 +85,9 @@ public class DiskOccupancy {
                     nodeDiskNum++;
                 }
             }
+        }
+        if(nodeDiskNum == 0){
+            return 0;
         }
         valueResult = valueResult / nodeDiskNum;
         return valueResult;

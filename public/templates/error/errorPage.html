@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+  <meta name="keywords" content="初七云,云虚拟主机管理系统">
+  <meta name="description" content="云虚拟主机管理系统">
+  <title th:text="${status}+' - 云虚拟主机管理系统'">404 - 云虚拟主机管理系统</title>
+<link rel="shortcut icon" type="image/x-icon" href="//static.chuqis.com/ChuqiVhost/favicon.ico">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link href="//static.chuqis.com/ChuqiVhost/css/bootstrap.min.css" rel="stylesheet">
+<link href="//static.chuqis.com/ChuqiVhost/css/materialdesignicons.min.css" rel="stylesheet">
+<link href="//static.chuqis.com/ChuqiVhost/css/style.min.css" rel="stylesheet">
+<style>
+body {
+    background: #f4f5fa;
+}
+[data-theme|='translucent'],
+[data-theme|='dark'] {
+    background: transparent;
+    color: #fff;
+}
+.error-page {
+    height: 100%;
+    position: fixed;
+    width: 100%;
+}
+.error-body {
+    padding-top: 5%;
+}
+.error-body h1 {
+    font-size: 210px;
+    line-height: 210px;
+    color: #cacaca;
+}
+</style>
+</head>
+  
+<body>
+<section class="error-page">
+  <div class="error-box">
+    <div class="error-body text-center">
+      <h1 th:text="${status}">404</h1>
+      <h5 class="mb-5 mt-3 text-gray">很抱歉，但是那个页面看起来已经不存在了。</h5>
+    </div>
+  </div>
+</section>
+<script type="text/javascript" src="//static.chuqis.com/ChuqiVhost/js/jquery.min.js"></script>
+<script type="text/javascript" src="//static.chuqis.com/ChuqiVhost/js/bootstrap.min.js"></script>
+</body>
+</html>

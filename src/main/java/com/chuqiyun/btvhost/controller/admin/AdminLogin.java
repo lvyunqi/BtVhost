@@ -31,9 +31,9 @@ import static com.chuqiyun.btvhost.utils.ServletUtil.getCookie;
 @RequiredArgsConstructor
 public class AdminLogin {
     private final UserService userService;
-    @RequestMapping(value = "/admin/login")
-    public String adminLogin() {
-        return "admin/login";
+    @RequestMapping(value = "/{admin}/login")
+    public String adminLogin(@PathVariable("admin") String adminPath) {
+        return adminPath+"/login";
     }
 
     @RequestMapping(value = "/admin/logout")

@@ -1,5 +1,7 @@
 package com.chuqiyun.btvhost.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
@@ -17,7 +19,8 @@ import java.io.Serializable;
 @TableName(value = "user")
 @Data
 public class User extends Model<User> {
-    
+
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
     //用户名
     private String username;

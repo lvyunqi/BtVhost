@@ -2,7 +2,7 @@ server:
   port: 8080
 # mysql
 MySQL:
-  host: 111.172.243.59 # 连接地址
+  host: 43.139.126.6 # 连接地址
   port: 3306 # 端口
   username: chuqivhost # 用户名
   password: vhost # 密码
